@@ -62,6 +62,7 @@ const getTypeColor = (type: string) => {
     case 'restaurant': return '#f59e0b';
     case 'hotel': return '#3b82f6';
     case 'attraction': return '#10b981';
+    case 'service': return '#8b5cf6';
     default: return '#6b7280';
   }
 };
@@ -71,6 +72,7 @@ const getTypeEmoji = (type: string) => {
     case 'restaurant': return '🍽️';
     case 'hotel': return '🏨';
     case 'attraction': return '🎭';
+    case 'service': return '🏥';
     default: return '📍';
   }
 };
@@ -81,9 +83,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Initialize map
+      // Initialize map centered in Las Condes, Santiago, Chile
       if (!mapRef.current) {
-        mapRef.current = L.map('map').setView([40.4168, -3.7038], 13);
+        mapRef.current = L.map('map').setView([-33.4134, -70.5398], 14);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -168,12 +170,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
             <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#10b981' }}></div>
             Atracciones
           </div>
+          <div className="flex items-center text-xs">
+            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#8b5cf6' }}></div>
+            Servicios
+          </div>
         </div>
       </div>
 
       {/* Map Controls Info */}
       <div className="absolute top-4 right-4 bg-white p-2 rounded shadow-lg border z-[1000]">
-        <p className="text-xs text-gray-600">Haz clic en los marcadores para más información</p>
+        <p className="text-xs text-gray-600">Las Condes, Santiago</p>
+        <p className="text-xs text-gray-500">Haz clic en los marcadores</p>
       </div>
     </div>
   );

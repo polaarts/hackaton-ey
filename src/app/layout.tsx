@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Explorador de Ciudad",
-  description: "SPA con mapa interactivo usando Leaflet",
+  title: "Las Condes Explorer - Santiago, Chile",
+  description: "Explora los mejores lugares de Las Condes con nuestro mapa interactivo",
 };
 
 export default function RootLayout({
