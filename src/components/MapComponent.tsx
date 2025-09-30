@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useMemo } from 'react';
 import L from 'leaflet';
+import type { PointOfInterest } from '@/lib/reportConverter';
 
 // Fix para marcadores por defecto en Leaflet con Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -51,10 +52,10 @@ interface MapPoint {
 }
 
 interface MapComponentProps {
-  data: MapPoint[];
-  onMarkerClick: (point: MapPoint) => void;
+  data: PointOfInterest[];
+  onMarkerClick: (point: PointOfInterest) => void;
   onMapClick: () => void;
-  selectedReport: MapPoint | null;
+  selectedReport: PointOfInterest | null;
 }
 
 /* ─────────────────────────────
