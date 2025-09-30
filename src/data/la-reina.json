@@ -1,0 +1,47 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 314,
+    "shape_leng": 23724.8993,
+    "dis_elec": 11,
+    "cir_sena": 7,
+    "cod_comuna": 13113,
+    "codregion": 13,
+    "st_area_sh": 33615096.9517,
+    "st_length_": 28343.6615,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "La Reina",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.539,
+          -33.4289
+        ],
+        [
+          -70.5045,
+          -33.4381
+        ],
+        [
+          -70.4869,
+          -33.4617
+        ],
+        [
+          -70.5724,
+          -33.4589
+        ],
+        [
+          -70.5844,
+          -33.4317
+        ],
+        [
+          -70.539,
+          -33.4289
+        ]
+      ]
+    ]
+  }
+}

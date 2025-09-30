@@ -1,0 +1,47 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 323,
+    "shape_leng": 36618.9716,
+    "dis_elec": 11,
+    "cir_sena": 7,
+    "cod_comuna": 13122,
+    "codregion": 13,
+    "st_area_sh": 77092706.9478,
+    "st_length_": 43954.3369,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Peñalolén",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.5417,
+          -33.5125
+        ],
+        [
+          -70.59,
+          -33.5101
+        ],
+        [
+          -70.5722,
+          -33.459
+        ],
+        [
+          -70.4869,
+          -33.4617
+        ],
+        [
+          -70.4379,
+          -33.4901
+        ],
+        [
+          -70.5417,
+          -33.5125
+        ]
+      ]
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 328,
+    "shape_leng": 18338.2183,
+    "dis_elec": 9,
+    "cir_sena": 7,
+    "cod_comuna": 13127,
+    "codregion": 13,
+    "st_area_sh": 22529573.6344,
+    "st_length_": 22003.8634,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Recoleta",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6516,
+          -33.4321
+        ],
+        [
+          -70.6582,
+          -33.3997
+        ],
+        [
+          -70.6568,
+          -33.3765
+        ],
+        [
+          -70.6105,
+          -33.405
+        ],
+        [
+          -70.6516,
+          -33.4321
+        ]
+      ]
+    ]
+  }
+}

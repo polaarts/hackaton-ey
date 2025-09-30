@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 304,
+    "shape_leng": 16740.5089,
+    "dis_elec": 9,
+    "cir_sena": 7,
+    "cod_comuna": 13103,
+    "codregion": 13,
+    "st_area_sh": 16106927.6958,
+    "st_length_": 19971.3089,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Cerro Navia",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.7193,
+          -33.4132
+        ],
+        [
+          -70.7224,
+          -33.4389
+        ],
+        [
+          -70.7821,
+          -33.4169
+        ],
+        [
+          -70.7595,
+          -33.4123
+        ],
+        [
+          -70.7193,
+          -33.4132
+        ]
+      ]
+    ]
+  }
+}

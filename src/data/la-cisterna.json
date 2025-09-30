@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 310,
+    "shape_leng": 12797.5957,
+    "dis_elec": 13,
+    "cir_sena": 7,
+    "cod_comuna": 13109,
+    "codregion": 13,
+    "st_area_sh": 14541846.5798,
+    "st_length_": 15442.4127,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "La Cisterna",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6528,
+          -33.5476
+        ],
+        [
+          -70.6857,
+          -33.5389
+        ],
+        [
+          -70.6712,
+          -33.5106
+        ],
+        [
+          -70.6446,
+          -33.5173
+        ],
+        [
+          -70.6528,
+          -33.5476
+        ]
+      ]
+    ]
+  }
+}

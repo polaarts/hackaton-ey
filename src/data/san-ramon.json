@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 332,
+    "shape_leng": 11733.4867,
+    "dis_elec": 13,
+    "cir_sena": 7,
+    "cod_comuna": 13131,
+    "codregion": 13,
+    "st_area_sh": 9056279.7521,
+    "st_length_": 14061.5288,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "San Ramón",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6381,
+          -33.5186
+        ],
+        [
+          -70.6365,
+          -33.5187
+        ],
+        [
+          -70.631,
+          -33.558
+        ],
+        [
+          -70.6547,
+          -33.555
+        ],
+        [
+          -70.6381,
+          -33.5186
+        ]
+      ]
+    ]
+  }
+}

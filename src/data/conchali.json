@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 305,
+    "shape_leng": 13816.6343,
+    "dis_elec": 9,
+    "cir_sena": 7,
+    "cod_comuna": 13104,
+    "codregion": 13,
+    "st_area_sh": 15802665.9189,
+    "st_length_": 16624.3582,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Conchalí",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6631,
+          -33.3992
+        ],
+        [
+          -70.6819,
+          -33.403
+        ],
+        [
+          -70.7003,
+          -33.3661
+        ],
+        [
+          -70.6568,
+          -33.3765
+        ],
+        [
+          -70.6631,
+          -33.3992
+        ]
+      ]
+    ]
+  }
+}

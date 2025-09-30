@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 317,
+    "shape_leng": 11405.976,
+    "dis_elec": 13,
+    "cir_sena": 7,
+    "cod_comuna": 13116,
+    "codregion": 13,
+    "st_area_sh": 11804789.5926,
+    "st_length_": 13685.618,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Lo Espejo",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6941,
+          -33.5024
+        ],
+        [
+          -70.6712,
+          -33.5106
+        ],
+        [
+          -70.6857,
+          -33.5389
+        ],
+        [
+          -70.7067,
+          -33.5312
+        ],
+        [
+          -70.6941,
+          -33.5024
+        ]
+      ]
+    ]
+  }
+}

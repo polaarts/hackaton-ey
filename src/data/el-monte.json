@@ -1,0 +1,51 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 335,
+    "shape_leng": 51238.6111,
+    "dis_elec": 14,
+    "cir_sena": 7,
+    "cod_comuna": 13602,
+    "codregion": 13,
+    "st_area_sh": 166986446.678,
+    "st_length_": 61626.6024,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "El Monte",
+    "Provincia": "Talagante"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.9913,
+          -33.6147
+        ],
+        [
+          -70.9366,
+          -33.663
+        ],
+        [
+          -71.0313,
+          -33.7196
+        ],
+        [
+          -71.1026,
+          -33.7054
+        ],
+        [
+          -71.0978,
+          -33.6341
+        ],
+        [
+          -71.036,
+          -33.6429
+        ],
+        [
+          -70.9913,
+          -33.6147
+        ]
+      ]
+    ]
+  }
+}

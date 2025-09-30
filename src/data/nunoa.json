@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 321,
+    "shape_leng": 17714.126,
+    "dis_elec": 10,
+    "cir_sena": 7,
+    "cod_comuna": 13120,
+    "codregion": 13,
+    "st_area_sh": 24367720.2403,
+    "st_length_": 21422.1854,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Ñuñoa",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.5768,
+          -33.4702
+        ],
+        [
+          -70.623,
+          -33.4749
+        ],
+        [
+          -70.6315,
+          -33.4498
+        ],
+        [
+          -70.5822,
+          -33.4337
+        ],
+        [
+          -70.5768,
+          -33.4702
+        ]
+      ]
+    ]
+  }
+}

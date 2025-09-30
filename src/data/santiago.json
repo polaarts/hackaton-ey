@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 333,
+    "shape_leng": 24644.0186,
+    "dis_elec": 10,
+    "cir_sena": 7,
+    "cod_comuna": 13101,
+    "codregion": 13,
+    "st_area_sh": 33376783.7727,
+    "st_length_": 29171.6095,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Santiago",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6517,
+          -33.4321
+        ],
+        [
+          -70.6245,
+          -33.4699
+        ],
+        [
+          -70.6809,
+          -33.4784
+        ],
+        [
+          -70.6915,
+          -33.4395
+        ],
+        [
+          -70.6517,
+          -33.4321
+        ]
+      ]
+    ]
+  }
+}

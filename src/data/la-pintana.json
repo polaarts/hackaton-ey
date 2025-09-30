@@ -1,0 +1,51 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 313,
+    "shape_leng": 26302.7906,
+    "dis_elec": 12,
+    "cir_sena": 7,
+    "cod_comuna": 13112,
+    "codregion": 13,
+    "st_area_sh": 44063102.067,
+    "st_length_": 31608.3044,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "La Pintana",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6324,
+          -33.5581
+        ],
+        [
+          -70.6122,
+          -33.5556
+        ],
+        [
+          -70.6059,
+          -33.602
+        ],
+        [
+          -70.6286,
+          -33.6277
+        ],
+        [
+          -70.6706,
+          -33.6074
+        ],
+        [
+          -70.6549,
+          -33.5549
+        ],
+        [
+          -70.6324,
+          -33.5581
+        ]
+      ]
+    ]
+  }
+}

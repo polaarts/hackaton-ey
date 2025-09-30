@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 312,
+    "shape_leng": 14001.4247,
+    "dis_elec": 10,
+    "cir_sena": 7,
+    "cod_comuna": 13111,
+    "codregion": 13,
+    "st_area_sh": 14519877.9967,
+    "st_length_": 16893.8361,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "La Granja",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6365,
+          -33.5188
+        ],
+        [
+          -70.6112,
+          -33.513
+        ],
+        [
+          -70.6122,
+          -33.5556
+        ],
+        [
+          -70.6307,
+          -33.5598
+        ],
+        [
+          -70.6365,
+          -33.5188
+        ]
+      ]
+    ]
+  }
+}

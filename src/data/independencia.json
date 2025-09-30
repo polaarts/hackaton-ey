@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 309,
+    "shape_leng": 11488.6957,
+    "dis_elec": 9,
+    "cir_sena": 7,
+    "cod_comuna": 13108,
+    "codregion": 13,
+    "st_area_sh": 10686368.3225,
+    "st_length_": 14088.4174,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Independencia",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6581,
+          -33.3991
+        ],
+        [
+          -70.6501,
+          -33.4176
+        ],
+        [
+          -70.6516,
+          -33.4321
+        ],
+        [
+          -70.6819,
+          -33.403
+        ],
+        [
+          -70.6581,
+          -33.3991
+        ]
+      ]
+    ]
+  }
+}

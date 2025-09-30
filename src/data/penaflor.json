@@ -1,0 +1,47 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 338,
+    "shape_leng": 38814.4471,
+    "dis_elec": 14,
+    "cir_sena": 7,
+    "cod_comuna": 13605,
+    "codregion": 13,
+    "st_area_sh": 99927507.0468,
+    "st_length_": 46582.4108,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Peñaflor",
+    "Provincia": "Talagante"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.8614,
+          -33.5753
+        ],
+        [
+          -70.819,
+          -33.5986
+        ],
+        [
+          -70.8457,
+          -33.6339
+        ],
+        [
+          -70.9619,
+          -33.6418
+        ],
+        [
+          -70.9353,
+          -33.5881
+        ],
+        [
+          -70.8614,
+          -33.5753
+        ]
+      ]
+    ]
+  }
+}

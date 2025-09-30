@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 329,
+    "shape_leng": 28974.9567,
+    "dis_elec": 9,
+    "cir_sena": 7,
+    "cod_comuna": 13128,
+    "codregion": 13,
+    "st_area_sh": 34071271.6529,
+    "st_length_": 34707.5182,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Renca",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6961,
+          -33.382
+        ],
+        [
+          -70.6713,
+          -33.4265
+        ],
+        [
+          -70.7822,
+          -33.4137
+        ],
+        [
+          -70.7565,
+          -33.3837
+        ],
+        [
+          -70.6961,
+          -33.382
+        ]
+      ]
+    ]
+  }
+}

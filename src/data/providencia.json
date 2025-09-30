@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 324,
+    "shape_leng": 16072.4082,
+    "dis_elec": 10,
+    "cir_sena": 7,
+    "cod_comuna": 13123,
+    "codregion": 13,
+    "st_area_sh": 20730831.4383,
+    "st_length_": 19223.7409,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Providencia",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.5848,
+          -33.4312
+        ],
+        [
+          -70.5927,
+          -33.4477
+        ],
+        [
+          -70.6315,
+          -33.4498
+        ],
+        [
+          -70.6145,
+          -33.4091
+        ],
+        [
+          -70.5848,
+          -33.4312
+        ]
+      ]
+    ]
+  }
+}

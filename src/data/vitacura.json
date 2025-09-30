@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 334,
+    "shape_leng": 25316.046,
+    "dis_elec": 11,
+    "cir_sena": 7,
+    "cod_comuna": 13132,
+    "codregion": 13,
+    "st_area_sh": 41234129.0553,
+    "st_length_": 30628.9324,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Vitacura",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.5794,
+          -33.352
+        ],
+        [
+          -70.5175,
+          -33.3727
+        ],
+        [
+          -70.6145,
+          -33.4091
+        ],
+        [
+          -70.601,
+          -33.3627
+        ],
+        [
+          -70.5794,
+          -33.352
+        ]
+      ]
+    ]
+  }
+}

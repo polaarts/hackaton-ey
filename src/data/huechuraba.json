@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 308,
+    "shape_leng": 32111.2658,
+    "dis_elec": 9,
+    "cir_sena": 7,
+    "cod_comuna": 13107,
+    "codregion": 13,
+    "st_area_sh": 64319628.3659,
+    "st_length_": 38432.0997,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Huechuraba",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6892,
+          -33.3662
+        ],
+        [
+          -70.6675,
+          -33.3281
+        ],
+        [
+          -70.5825,
+          -33.3509
+        ],
+        [
+          -70.6105,
+          -33.405
+        ],
+        [
+          -70.6892,
+          -33.3662
+        ]
+      ]
+    ]
+  }
+}

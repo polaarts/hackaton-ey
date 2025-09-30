@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 326,
+    "shape_leng": 35236.9206,
+    "dis_elec": 8,
+    "cir_sena": 7,
+    "cod_comuna": 13125,
+    "codregion": 13,
+    "st_area_sh": 81528020.2769,
+    "st_length_": 42127.3203,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Quilicura",
+    "Provincia": "Santiago"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.6957,
+          -33.3829
+        ],
+        [
+          -70.7498,
+          -33.3889
+        ],
+        [
+          -70.7978,
+          -33.3384
+        ],
+        [
+          -70.6981,
+          -33.3209
+        ],
+        [
+          -70.6957,
+          -33.3829
+        ]
+      ]
+    ]
+  }
+}

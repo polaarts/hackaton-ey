@@ -1,0 +1,59 @@
+{
+  "type": "Feature",
+  "properties": {
+    "objectid": 337,
+    "shape_leng": 50719.9475,
+    "dis_elec": 14,
+    "cir_sena": 7,
+    "cod_comuna": 13604,
+    "codregion": 13,
+    "st_area_sh": 116364344.646,
+    "st_length_": 60916.5432,
+    "Region": "Región Metropolitana de Santiago",
+    "Comuna": "Padre Hurtado",
+    "Provincia": "Talagante"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -70.8494,
+          -33.5768
+        ],
+        [
+          -70.9353,
+          -33.5881
+        ],
+        [
+          -70.9484,
+          -33.5606
+        ],
+        [
+          -70.9197,
+          -33.5112
+        ],
+        [
+          -70.8517,
+          -33.5378
+        ],
+        [
+          -70.8078,
+          -33.5283
+        ],
+        [
+          -70.7786,
+          -33.5691
+        ],
+        [
+          -70.819,
+          -33.5986
+        ],
+        [
+          -70.8494,
+          -33.5768
+        ]
+      ]
+    ]
+  }
+}
