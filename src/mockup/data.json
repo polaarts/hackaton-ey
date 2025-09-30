@@ -1,0 +1,48 @@
+{
+  "reports": [
+    {
+      "reportId": "550e8400-e29b-41d4-a716-446655440000",
+      "title": "Vehículo sospechoso",
+      "summary": "Avistamiento de un vehículo sospechoso en la vía pública.",
+      "incidentDatetime": "2025-09-30T10:30:00Z",
+      "location": {
+        "address": "Av. Providencia 1234, Santiago, Chile",
+        "latitude": -33.4263,
+        "longitude": -70.6200
+      },
+      "licensePlate": "ABCD12",
+      "vehicleDescription": "Sedán gris, marca Toyota",
+      "imageDescriptionRaw": "Imagen borrosa captada por cámara de seguridad",
+      "timelineDeVistas": [
+        {
+          "index": 1,
+          "address": "Av. Providencia 1234",
+          "datetime": "2025-09-30T10:30:00Z",
+          "source": "cámara municipal",
+          "notes": "Avistado cerca de la esquina"
+        },
+        {
+          "index": 2,
+          "address": "Av. Manuel Montt 789",
+          "datetime": "2025-09-30T10:45:00Z",
+          "source": null,
+          "notes": null
+        }
+      ],
+      "lastKnownPosition": {
+        "address": "Av. Los Leones 456",
+        "datetime": "2025-09-30T11:00:00Z"
+      },
+      "evidence": [
+        "https://ejemplo.com/evidencia1.jpg",
+        "https://ejemplo.com/evidencia2.mp4"
+      ],
+      "recommendedActions": [
+        "Alertar a Carabineros",
+        "Monitorear cámaras cercanas"
+      ],
+      "confidence": 0.87,
+      "notes": "Posible coincidencia con otro reporte previo"
+    }
+  ]
+}
