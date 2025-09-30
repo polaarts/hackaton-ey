@@ -95,7 +95,7 @@ const mockCrimeData = {
           address: "Av. Los Leones 456",
           datetime: "2025-09-30T11:00:00Z"
         },
-        evidence: ["https://ejemplo.com/evidencia1.jpg"],
+        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
         recommendedActions: ["Alertar a Carabineros", "Monitorear cámaras cercanas"],
         confidence: 0.87,
         notes: "Posible coincidencia con otro reporte previo"
@@ -135,7 +135,7 @@ const mockCrimeData = {
           address: "Av. Apoquindo 4500",
           datetime: "2025-09-30T11:30:00Z"
         },
-        evidence: ["https://ejemplo.com/seguimiento1.jpg"],
+        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
         recommendedActions: ["Continuar seguimiento", "Coordinar interceptación"],
         confidence: 0.92,
         notes: "Confirmada secuencia del vehículo original"
@@ -175,7 +175,7 @@ const mockCrimeData = {
           address: "Av. El Bosque Norte 500",
           datetime: "2025-09-30T12:00:00Z"
         },
-        evidence: ["https://ejemplo.com/seguimiento2.jpg"],
+        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
         recommendedActions: ["Interceptar en siguiente semáforo", "Coordinar patrullas"],
         confidence: 0.89,
         notes: "Ruta confirmada hacia sector empresarial"
@@ -217,7 +217,7 @@ const mockCrimeData = {
           address: "Av. Apoquindo 3000",
           datetime: "2025-09-30T14:30:00Z"
         },
-        evidence: ["https://ejemplo.com/sospecha1.jpg"],
+        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
         recommendedActions: ["Verificar con propietario", "Monitorear área"],
         confidence: 0.75,
         notes: "Requiere confirmación adicional"
@@ -257,7 +257,7 @@ const mockCrimeData = {
           address: "Av. Libertador B. O'Higgins 1000",
           datetime: "2025-09-30T16:45:00Z"
         },
-        evidence: ["https://ejemplo.com/nocturna1.jpg"],
+        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
         recommendedActions: ["Patrullaje en la zona", "Verificar antecedentes"],
         confidence: 0.68,
         notes: "Imagen de baja calidad, requiere verificación"
@@ -299,7 +299,7 @@ const mockCrimeData = {
           address: "Av. Matta 789",
           datetime: "2025-09-30T18:10:00Z"
         },
-        evidence: ["https://ejemplo.com/borrosa1.jpg"],
+        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
         recommendedActions: ["Revisar manualmente", "Descartar si no hay coincidencias"],
         confidence: 0.45,
         notes: "Confianza muy baja, posible falso positivo"
