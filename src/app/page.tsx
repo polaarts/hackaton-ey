@@ -1,9 +1,8 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
 
-// Type definitions for crime reports
 interface Location {
   address: string;
   latitude: number;
@@ -18,6 +17,11 @@ interface TimelineEntry {
   notes: string | null;
 }
 
+interface LastKnownPosition {
+  address: string;
+  datetime: string;
+}
+
 interface CrimeReport {
   reportId: string;
   title: string;
@@ -28,17 +32,14 @@ interface CrimeReport {
   vehicleDescription: string;
   imageDescriptionRaw: string;
   timelineDeVistas: TimelineEntry[];
-  lastKnownPosition: {
-    address: string;
-    datetime: string;
-  };
+  lastKnownPosition: LastKnownPosition;
   evidence: string[];
   recommendedActions: string[];
   confidence: number;
   notes: string;
 }
 
-interface MapPoint {
+interface PointOfInterest {
   id: string;
   name: string;
   lat: number;
@@ -49,17 +50,13 @@ interface MapPoint {
   report: CrimeReport;
 }
 
-interface Category {
-  key: string;
-  label: string;
-  icon: string;
-}
-
-// Dynamically import the map component to avoid SSR issues
+// Dynamic import of MapComponent
 const MapComponent = dynamic(() => import('../components/MapComponent'), {
   ssr: false,
-  loading: () => <div className="h-96 bg-gray-200 flex items-center justify-center">Cargando mapa...</div>
-});
+  loading: () => <div className="h-full bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">
+    <div className="text-gray-500">Cargando mapa...</div>
+  </div>
+})
 
 // Mock crime data for Región Metropolitana de Santiago - Vehicle Theft Reports
 const mockCrimeData = {
@@ -105,17 +102,99 @@ const mockCrimeData = {
       }
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440004",
+      name: "ABCD12 - Avistamiento Los Leones",
+      lat: -33.4089,
+      lng: -70.5289,
+      type: "high-confidence",
+      rating: 92,
+      description: "Sedán gris Toyota - Secuencia del mismo vehículo",
+      report: {
+        reportId: "550e8400-e29b-41d4-a716-446655440004",
+        title: "Avistamiento posterior - mismo vehículo",
+        summary: "El mismo vehículo sospechoso avistado en nueva ubicación.",
+        incidentDatetime: "2025-09-30T11:15:00Z",
+        location: {
+          address: "Av. Los Leones 456, Las Condes",
+          latitude: -33.4089,
+          longitude: -70.5289
+        },
+        licensePlate: "ABCD12",
+        vehicleDescription: "Sedán gris, marca Toyota",
+        imageDescriptionRaw: "Mayor claridad en imagen de seguimiento",
+        timelineDeVistas: [
+          {
+            index: 1,
+            address: "Av. Los Leones 456",
+            datetime: "2025-09-30T11:15:00Z",
+            source: "cámara de tráfico",
+            notes: "Vehículo moviéndose hacia el oriente"
+          }
+        ],
+        lastKnownPosition: {
+          address: "Av. Apoquindo 4500",
+          datetime: "2025-09-30T11:30:00Z"
+        },
+        evidence: ["https://ejemplo.com/seguimiento1.jpg"],
+        recommendedActions: ["Continuar seguimiento", "Coordinar interceptación"],
+        confidence: 0.92,
+        notes: "Confirmada secuencia del vehículo original"
+      }
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440005",
+      name: "ABCD12 - Avistamiento Apoquindo",
+      lat: -33.4056,
+      lng: -70.5112,
+      type: "high-confidence",
+      rating: 89,
+      description: "Sedán gris Toyota - Continuación de secuencia",
+      report: {
+        reportId: "550e8400-e29b-41d4-a716-446655440005",
+        title: "Tercer avistamiento - confirmación de ruta",
+        summary: "Confirmación de la ruta del vehículo sospechoso hacia Las Condes.",
+        incidentDatetime: "2025-09-30T11:45:00Z",
+        location: {
+          address: "Av. Apoquindo 4500, Las Condes",
+          latitude: -33.4056,
+          longitude: -70.5112
+        },
+        licensePlate: "ABCD12",
+        vehicleDescription: "Sedán gris, marca Toyota",
+        imageDescriptionRaw: "Imagen clara de perfil del vehículo",
+        timelineDeVistas: [
+          {
+            index: 1,
+            address: "Av. Apoquindo 4500",
+            datetime: "2025-09-30T11:45:00Z",
+            source: "cámara de tráfico",
+            notes: "Vehículo avanzando hacia el oriente"
+          }
+        ],
+        lastKnownPosition: {
+          address: "Av. El Bosque Norte 500",
+          datetime: "2025-09-30T12:00:00Z"
+        },
+        evidence: ["https://ejemplo.com/seguimiento2.jpg"],
+        recommendedActions: ["Interceptar en siguiente semáforo", "Coordinar patrullas"],
+        confidence: 0.89,
+        notes: "Ruta confirmada hacia sector empresarial"
+      }
+    }
+  ],
+  'medium-confidence': [
+    {
       id: "550e8400-e29b-41d4-a716-446655440001",
       name: "Robo Confirmado - XYZ789",
       lat: -33.4178,
       lng: -70.5456,
-      type: "high-confidence",
-      rating: 95,
-      description: "SUV negro Hyundai - Confianza: 95%",
+      type: "medium-confidence",
+      rating: 75,
+      description: "SUV negro Hyundai - Confianza: 75%",
       report: {
         reportId: "550e8400-e29b-41d4-a716-446655440001",
-        title: "Robo de vehículo confirmado",
-        summary: "Robo de SUV negro en estacionamiento comercial.",
+        title: "Posible robo de vehículo",
+        summary: "Posible robo de SUV negro en estacionamiento comercial.",
         incidentDatetime: "2025-09-30T14:15:00Z",
         location: {
           address: "Costanera Center, Las Condes",
@@ -124,257 +203,256 @@ const mockCrimeData = {
         },
         licensePlate: "XYZ789",
         vehicleDescription: "SUV negro, marca Hyundai",
-        imageDescriptionRaw: "Múltiples ángulos de cámaras de seguridad",
+        imageDescriptionRaw: "Imagen parcialmente obstruida",
         timelineDeVistas: [
           {
             index: 1,
             address: "Costanera Center - Estacionamiento",
             datetime: "2025-09-30T14:15:00Z",
             source: "cámara privada",
-            notes: "Robo en proceso"
+            notes: "Actividad sospechosa en estacionamiento"
           }
         ],
         lastKnownPosition: {
           address: "Av. Apoquindo 3000",
           datetime: "2025-09-30T14:30:00Z"
         },
-        evidence: ["https://ejemplo.com/robo1.mp4", "https://ejemplo.com/robo2.jpg"],
-        recommendedActions: ["Alerta inmediata", "Bloqueo de vías"],
-        confidence: 0.95,
-        notes: "Robo confirmado por múltiples fuentes"
+        evidence: ["https://ejemplo.com/sospecha1.jpg"],
+        recommendedActions: ["Verificar con propietario", "Monitorear área"],
+        confidence: 0.75,
+        notes: "Requiere confirmación adicional"
       }
-    }
-  ],
-  'medium-confidence': [
+    },
     {
       id: "550e8400-e29b-41d4-a716-446655440002",
-      name: "Actividad Sospechosa - DEF456",
-      lat: -33.4378,
-      lng: -70.6504,
+      name: "Actividad Sospechosa - DEFG34",
+      lat: -33.4372,
+      lng: -70.6506,
       type: "medium-confidence",
-      rating: 65,
-      description: "Hatchback blanco Chevrolet - Confianza: 65%",
+      rating: 68,
+      description: "Pickup blanca Ford - Confianza: 68%",
       report: {
         reportId: "550e8400-e29b-41d4-a716-446655440002",
-        title: "Actividad sospechosa detectada",
-        summary: "Comportamiento inusual en zona comercial.",
-        incidentDatetime: "2025-09-30T16:45:00Z",
+        title: "Actividad sospechosa",
+        summary: "Vehículo en actividad sospechosa cerca de residencias.",
+        incidentDatetime: "2025-09-30T16:20:00Z",
         location: {
-          address: "Plaza de Armas, Santiago Centro",
-          latitude: -33.4378,
-          longitude: -70.6504
+          address: "Calle Merced 456, Santiago Centro",
+          latitude: -33.4372,
+          longitude: -70.6506
         },
-        licensePlate: "DEF456",
-        vehicleDescription: "Hatchback blanco, marca Chevrolet",
-        imageDescriptionRaw: "Imagen parcialmente obstruida",
+        licensePlate: "DEFG34",
+        vehicleDescription: "Pickup blanca, marca Ford",
+        imageDescriptionRaw: "Imagen nocturna con baja visibilidad",
         timelineDeVistas: [
           {
             index: 1,
-            address: "Plaza de Armas",
-            datetime: "2025-09-30T16:45:00Z",
-            source: "cámara municipal",
-            notes: "Movimientos erráticos"
+            address: "Calle Merced 456",
+            datetime: "2025-09-30T16:20:00Z",
+            source: "cámara residencial",
+            notes: "Vehículo detenido por tiempo prolongado"
           }
         ],
         lastKnownPosition: {
-          address: "Calle Estado 200",
-          datetime: "2025-09-30T17:00:00Z"
+          address: "Av. Libertador B. O'Higgins 1000",
+          datetime: "2025-09-30T16:45:00Z"
         },
-        evidence: ["https://ejemplo.com/sospecha1.jpg"],
-        recommendedActions: ["Monitoreo continuo"],
-        confidence: 0.65,
-        notes: "Requiere verificación adicional"
+        evidence: ["https://ejemplo.com/nocturna1.jpg"],
+        recommendedActions: ["Patrullaje en la zona", "Verificar antecedentes"],
+        confidence: 0.68,
+        notes: "Imagen de baja calidad, requiere verificación"
       }
     }
   ],
   'low-confidence': [
     {
       id: "550e8400-e29b-41d4-a716-446655440003",
-      name: "Posible Incidente - GHI123",
-      lat: -33.4567,
-      lng: -70.5989,
+      name: "Alerta Menor - HIJK56",
+      lat: -33.4489,
+      lng: -70.6693,
       type: "low-confidence",
-      rating: 35,
-      description: "Pickup roja Ford - Confianza: 35%",
+      rating: 45,
+      description: "Hatchback azul Nissan - Confianza: 45%",
       report: {
         reportId: "550e8400-e29b-41d4-a716-446655440003",
-        title: "Posible incidente vehicular",
-        summary: "Detección automática requiere verificación.",
-        incidentDatetime: "2025-09-30T19:20:00Z",
+        title: "Alerta de bajo nivel",
+        summary: "Posible coincidencia con patrón de búsqueda.",
+        incidentDatetime: "2025-09-30T18:10:00Z",
         location: {
-          address: "Ñuñoa, Santiago",
-          latitude: -33.4567,
-          longitude: -70.5989
+          address: "Av. Matta 789, Santiago",
+          latitude: -33.4489,
+          longitude: -70.6693
         },
-        licensePlate: "GHI123",
-        vehicleDescription: "Pickup roja, marca Ford",
-        imageDescriptionRaw: "Imagen de baja calidad",
+        licensePlate: "HIJK56",
+        vehicleDescription: "Hatchback azul, marca Nissan",
+        imageDescriptionRaw: "Imagen muy borrosa, difícil identificación",
         timelineDeVistas: [
           {
             index: 1,
-            address: "Av. Grecia 1500",
-            datetime: "2025-09-30T19:20:00Z",
-            source: "detección automática",
-            notes: "Algoritmo de detección"
+            address: "Av. Matta 789",
+            datetime: "2025-09-30T18:10:00Z",
+            source: "cámara móvil",
+            notes: "Posible coincidencia en algoritmo"
           }
         ],
         lastKnownPosition: {
-          address: "Av. Grecia 1500",
-          datetime: "2025-09-30T19:20:00Z"
+          address: "Av. Matta 789",
+          datetime: "2025-09-30T18:10:00Z"
         },
-        evidence: ["https://ejemplo.com/auto1.jpg"],
-        recommendedActions: ["Revisión manual"],
-        confidence: 0.35,
-        notes: "Baja confianza, posible falso positivo"
+        evidence: ["https://ejemplo.com/borrosa1.jpg"],
+        recommendedActions: ["Revisar manualmente", "Descartar si no hay coincidencias"],
+        confidence: 0.45,
+        notes: "Confianza muy baja, posible falso positivo"
       }
     }
   ]
-};
-
-const categories: Category[] = [
-  { key: 'all', label: 'Todos los Reportes', icon: '🚨' },
-  { key: 'high-confidence', label: 'Alta Confianza', icon: '🔴' },
-  { key: 'medium-confidence', label: 'Media Confianza', icon: '🟡' },
-  { key: 'low-confidence', label: 'Baja Confianza', icon: '🟢' },
-];
+}
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [filteredData, setFilteredData] = useState<MapPoint[]>([]);
-  const [selectedPoint, setSelectedPoint] = useState<MapPoint | null>(null);
+  const [selectedConfidence, setSelectedConfidence] = useState<string[]>(['high-confidence', 'medium-confidence', 'low-confidence'])
+  const [selectedReport, setSelectedReport] = useState<PointOfInterest | null>(null)
 
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredData([
-        ...mockCrimeData['high-confidence'], 
-        ...mockCrimeData['medium-confidence'], 
-        ...mockCrimeData['low-confidence']
-      ]);
-    } else {
-      setFilteredData((mockCrimeData as any)[selectedCategory] || []);
+  // Flatten all data based on selected confidence levels
+  const filteredData = selectedConfidence.reduce((acc, confidence) => {
+    return [...acc, ...mockCrimeData[confidence as keyof typeof mockCrimeData]]
+  }, [] as PointOfInterest[])
+
+  const getConfidenceColor = (type: string) => {
+    switch (type) {
+      case 'high-confidence': return 'text-red-600 bg-red-50 border-red-200'
+      case 'medium-confidence': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
+      case 'low-confidence': return 'text-green-600 bg-green-50 border-green-200'
+      default: return 'text-gray-600 bg-gray-50 border-gray-200'
     }
-  }, [selectedCategory]);
+  }
 
-  const handlePointClick = (point: MapPoint) => {
-    setSelectedPoint(point);
-  };
+  const getConfidenceLabel = (type: string) => {
+    switch (type) {
+      case 'high-confidence': return 'Alta Confianza'
+      case 'medium-confidence': return 'Confianza Media'
+      case 'low-confidence': return 'Baja Confianza'
+      default: return 'Desconocido'
+    }
+  }
 
-  const formatDateTime = (dateTime: string) => {
-    return new Date(dateTime).toLocaleString('es-CL', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  const handleMarkerClick = (report: PointOfInterest) => {
+    setSelectedReport(report)
+  }
 
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'text-red-600 bg-red-50';
-    if (confidence >= 50) return 'text-yellow-600 bg-yellow-50';
-    return 'text-green-600 bg-green-50';
-  };
+  const handleConfidenceChange = (confidence: string) => {
+    setSelectedConfidence(prev => 
+      prev.includes(confidence)
+        ? prev.filter(c => c !== confidence)
+        : [...prev, confidence]
+    )
+  }
 
   return (
     <div className="h-screen flex">
-      {/* Map Container - Full Screen */}
+      {/* Main map area */}
       <div className="flex-1 relative">
         <MapComponent 
           data={filteredData}
-          onPointClick={handlePointClick}
-          selectedPoint={selectedPoint}
+          onMarkerClick={handleMarkerClick}
+          selectedReport={selectedReport}
         />
       </div>
 
-      {/* Sidebar - Right Side */}
-      <div className="w-96 bg-white shadow-lg border-l flex flex-col">
+      {/* Right sidebar */}
+      <div className="w-96 bg-white shadow-lg border-l border-gray-200 flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b bg-red-50">
-          <h1 className="text-lg font-bold text-red-900">🚔 Monitor de Seguridad</h1>
-          <p className="text-xs text-red-700 mt-1">
-            Región Metropolitana • {filteredData.length} reportes activos
-          </p>
+        <div className="p-4 border-b border-gray-200 bg-gray-50">
+          <h1 className="text-xl font-bold text-gray-800">Monitor de Seguridad</h1>
+          <p className="text-sm text-gray-600">Detección de Robos Vehiculares</p>
         </div>
 
-        {/* Categories */}
-        <div className="p-4 border-b">
-          <h2 className="text-sm font-semibold mb-3 text-gray-700">Nivel de Confianza</h2>
+        {/* Filters */}
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="font-semibold text-gray-700 mb-2">Filtros por Confianza</h3>
           <div className="space-y-2">
-            {categories.map((category) => (
-              <button
-                key={category.key}
-                onClick={() => setSelectedCategory(category.key)}
-                className={`w-full text-left p-2 rounded-lg transition-colors text-sm ${
-                  selectedCategory === category.key
-                    ? 'bg-red-100 text-red-700 border border-red-200'
-                    : 'hover:bg-gray-100'
-                }`}
-              >
-                <span className="mr-2">{category.icon}</span>
-                {category.label}
-              </button>
+            {['high-confidence', 'medium-confidence', 'low-confidence'].map(confidence => (
+              <label key={confidence} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={selectedConfidence.includes(confidence)}
+                  onChange={() => handleConfidenceChange(confidence)}
+                  className="rounded border-gray-300"
+                />
+                <span className={`px-2 py-1 rounded text-xs border ${getConfidenceColor(confidence)}`}>
+                  {getConfidenceLabel(confidence)}
+                </span>
+              </label>
             ))}
           </div>
         </div>
 
-        {/* Selected Point Info */}
-        {selectedPoint && (
-          <div className="p-4 border-b bg-red-50">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-red-900 text-sm">{selectedPoint.report.title}</h3>
-              <span className={`px-2 py-1 rounded text-xs font-semibold ${getConfidenceColor(selectedPoint.rating)}`}>
-                {selectedPoint.rating}%
-              </span>
-            </div>
-            <p className="text-xs text-red-700 mb-2">{selectedPoint.report.licensePlate} - {selectedPoint.report.vehicleDescription}</p>
-            <p className="text-xs text-gray-600 mb-2">{selectedPoint.report.location.address}</p>
-            <p className="text-xs text-red-600">{formatDateTime(selectedPoint.report.incidentDatetime)}</p>
-          </div>
-        )}
-
-        {/* Reports List - Scrollable */}
+        {/* Reports list */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4">
-            <h2 className="text-sm font-semibold mb-3 text-gray-700">
-              {selectedCategory === 'all' ? 'Todos los Reportes' : categories.find(c => c.key === selectedCategory)?.label}
-            </h2>
+            <h3 className="font-semibold text-gray-700 mb-3">
+              Reportes Activos ({filteredData.length})
+            </h3>
             <div className="space-y-3">
-              {filteredData.map((point) => (
-                <div 
-                  key={point.id}
-                  className={`bg-white rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
-                    selectedPoint?.id === point.id ? 'ring-2 ring-red-500 bg-red-50' : 'hover:bg-gray-50'
+              {filteredData.map((item) => (
+                <div
+                  key={item.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                    selectedReport?.id === item.id 
+                      ? 'bg-blue-50 border-blue-300' 
+                      : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                   }`}
-                  onClick={() => handlePointClick(point)}
+                  onClick={() => handleMarkerClick(item)}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 text-sm">{point.report.title}</h3>
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${getConfidenceColor(point.rating)}`}>
-                      {point.rating}%
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium text-gray-800 text-sm">{item.name}</h4>
+                    <span className={`px-2 py-1 rounded text-xs border ${getConfidenceColor(item.type)}`}>
+                      {item.rating}%
                     </span>
                   </div>
-                  <p className="text-xs text-gray-800 font-medium mb-1">
-                    📋 {point.report.licensePlate} - {point.report.vehicleDescription}
+                  <p className="text-xs text-gray-600 mb-1">{item.description}</p>
+                  <p className="text-xs text-gray-500">
+                    Patente: <span className="font-mono font-medium">{item.report.licensePlate}</span>
                   </p>
-                  <p className="text-xs text-gray-600 mb-2">📍 {point.report.location.address}</p>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500">
-                      🕒 {formatDateTime(point.report.incidentDatetime)}
-                    </span>
-                    <span className={`px-2 py-1 rounded ${
-                      point.type === 'high-confidence' ? 'bg-red-100 text-red-700' :
-                      point.type === 'medium-confidence' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-green-100 text-green-700'
-                    }`}>
-                      {point.type.replace('-', ' ').toUpperCase()}
-                    </span>
-                  </div>
+                  <p className="text-xs text-gray-500">
+                    {new Date(item.report.incidentDatetime).toLocaleString('es-CL')}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Selected report details */}
+        {selectedReport && (
+          <div className="border-t border-gray-200 bg-gray-50 p-4 max-h-64 overflow-y-auto">
+            <h3 className="font-semibold text-black mb-2">Detalles del Reporte</h3>
+            <div className="space-y-2 text-black text-sm">
+              <div>
+                <span className="font-medium">Título:</span> {selectedReport.report.title}
+              </div>
+              <div>
+                <span className="font-medium">Resumen:</span> {selectedReport.report.summary}
+              </div>
+              <div>
+                <span className="font-medium">Ubicación:</span> {selectedReport.report.location.address}
+              </div>
+              <div>
+                <span className="font-medium">Vehículo:</span> {selectedReport.report.vehicleDescription}
+              </div>
+              <div>
+                <span className="font-medium">Patente:</span> 
+                <span className="font-mono font-medium ml-1">{selectedReport.report.licensePlate}</span>
+              </div>
+              <div>
+                <span className="font-medium">Confianza:</span> {Math.round(selectedReport.report.confidence * 100)}%
+              </div>
+              <div>
+                <span className="font-medium">Notas:</span> {selectedReport.report.notes}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  );
+  )
 }

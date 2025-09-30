@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import L from 'leaflet';
 
 // Fix for default markers in Leaflet with Next.js
@@ -52,12 +52,30 @@ interface MapPoint {
 
 interface MapComponentProps {
   data: MapPoint[];
-  onPointClick: (point: MapPoint) => void;
-  selectedPoint: MapPoint | null;
+  onMarkerClick: (point: MapPoint) => void;
+  selectedReport: MapPoint | null;
 }
 
+const getTypeColor = (type: string) => {
+  switch (type) {
+    case 'high-confidence': return '#dc2626'; // red-600
+    case 'medium-confidence': return '#d97706'; // amber-600
+    case 'low-confidence': return '#16a34a'; // green-600
+    default: return '#6b7280'; // gray-500
+  }
+};
+
+const getTypeEmoji = (type: string) => {
+  switch (type) {
+    case 'high-confidence': return '🚨';
+    case 'medium-confidence': return '⚠️';
+    case 'low-confidence': return '📍';
+    default: return '📍';
+  }
+};
+
 const getMarkerIcon = (type: string, isSelected: boolean = false) => {
-  const color = isSelected ? '#ef4444' : getTypeColor(type);
+  const color = isSelected ? '#3b82f6' : getTypeColor(type);
   
   return L.divIcon({
     html: `
@@ -82,29 +100,12 @@ const getMarkerIcon = (type: string, isSelected: boolean = false) => {
     `,
     className: 'custom-marker',
     iconSize: [25, 25],
-    iconAnchor: [12.5, 25],
+    iconAnchor: [12, 25],
+    popupAnchor: [0, -25]
   });
 };
 
-const getTypeColor = (type: string) => {
-  switch (type) {
-    case 'high-confidence': return '#dc2626'; // red-600
-    case 'medium-confidence': return '#d97706'; // amber-600
-    case 'low-confidence': return '#16a34a'; // green-600
-    default: return '#6b7280'; // gray-500
-  }
-};
-
-const getTypeEmoji = (type: string) => {
-  switch (type) {
-    case 'high-confidence': return '🚨';
-    case 'medium-confidence': return '⚠️';
-    case 'low-confidence': return '👁️';
-    default: return '📍';
-  }
-};
-
-const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selectedPoint }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, selectedReport }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
 
@@ -126,7 +127,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
 
       // Add new markers
       data.forEach(point => {
-        const isSelected = selectedPoint?.id === point.id;
+        const isSelected = selectedReport?.id === point.id;
         const marker = L.marker([point.lat, point.lng], {
           icon: getMarkerIcon(point.type, isSelected)
         }).addTo(mapRef.current!);
@@ -153,7 +154,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
 
         // Add click event
         marker.on('click', () => {
-          onPointClick(point);
+          onMarkerClick(point);
         });
 
         markersRef.current.push(marker);
@@ -165,22 +166,22 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
         mapRef.current.fitBounds(group.getBounds().pad(0.1));
       }
     }
-  }, [data, selectedPoint, onPointClick]);
+  }, [data, selectedReport, onMarkerClick]);
 
   useEffect(() => {
     // Center map on selected point
-    if (selectedPoint && mapRef.current) {
-      mapRef.current.setView([selectedPoint.lat, selectedPoint.lng], 15);
+    if (selectedReport && mapRef.current) {
+      mapRef.current.setView([selectedReport.lat, selectedReport.lng], 15);
       
       // Open popup for selected marker
       const selectedMarker = markersRef.current.find((marker, index) => 
-        data[index]?.id === selectedPoint.id
+        data[index]?.id === selectedReport.id
       );
       if (selectedMarker) {
         selectedMarker.openPopup();
       }
     }
-  }, [selectedPoint, data]);
+  }, [selectedReport, data]);
 
   return (
     <div className="relative w-full h-full">
@@ -204,7 +205,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
           </div>
         </div>
       </div>
-      
+
     </div>
   );
 };
