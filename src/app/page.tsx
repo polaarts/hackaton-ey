@@ -1,58 +1,9 @@
 'use client'
 
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
-
-/** ─────────────────────────────
- *  Tipos (sin cambios estructurales)
- *  ───────────────────────────── */
-interface Location {
-  address: string;
-  latitude: number;
-  longitude: number;
-}
-interface TimelineEntry {
-  index: number;
-  address: string;
-  datetime: string;
-  source: string | null;
-  notes: string | null;
-}
-interface LastKnownPosition {
-  address: string;
-  datetime: string;
-}
-interface CrimeReport {
-  reportId: string;
-  title: string;
-  summary: string;
-  incidentDatetime: string;
-  location: Location;
-  licensePlate: string;
-  vehicleDescription: string;
-  imageDescriptionRaw: string;
-  timelineDeVistas: TimelineEntry[];
-  lastKnownPosition: LastKnownPosition;
-  evidence: string[];
-  recommendedActions: string[];
-  confidence: number;
-  notes: string;
-}
-interface PointOfInterest {
-  id: string;
-  name: string;
-  lat: number;
-  lng: number;
-  type: 'high-confidence' | 'medium-confidence' | 'low-confidence';
-  rating: number;
-  description: string;
-  report: CrimeReport;
-}
-
-/** ─────────────────────────────
- *  Helpers UX/UI
- *  ───────────────────────────── */
-type Confidence = 'high-confidence' | 'medium-confidence' | 'low-confidence';
+import { useReports } from '@/hooks/useReports'
+import type { PointOfInterest, Confidence } from '@/lib/reportConverter'
 
 const cn = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(' ')
 
@@ -93,195 +44,29 @@ const MapComponent = dynamic(() => import('../components/MapComponent'), {
 })
 
 /** ─────────────────────────────
- *  Mock data (igual que el tuyo)
- *  ───────────────────────────── */
-const mockCrimeData: Record<Confidence, PointOfInterest[]> = {
-  'high-confidence': [
-    {
-      id: "550e8400-e29b-41d4-a716-446655440000",
-      name: "Vehículo Sospechoso - ABCD12",
-      lat: -33.4263,
-      lng: -70.6200,
-      type: "high-confidence",
-      rating: 87,
-      description: "Sedán gris Toyota - Confianza: 87%",
-      report: {
-        reportId: "550e8400-e29b-41d4-a716-446655440000",
-        title: "Vehículo sospechoso",
-        summary: "Avistamiento de un vehículo sospechoso en la vía pública.",
-        incidentDatetime: "2025-09-30T10:30:00Z",
-        location: { address: "Av. Providencia 1234, Santiago, Chile", latitude: -33.4263, longitude: -70.6200 },
-        licensePlate: "ABCD12",
-        vehicleDescription: "Sedán gris, marca Toyota",
-        imageDescriptionRaw: "Imagen borrosa captada por cámara de seguridad",
-        timelineDeVistas: [{ index: 1, address: "Av. Providencia 1234", datetime: "2025-09-30T10:30:00Z", source: "cámara municipal", notes: "Avistado cerca de la esquina" }],
-        lastKnownPosition: { address: "Av. Los Leones 456", datetime: "2025-09-30T11:00:00Z" },
-        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
-        recommendedActions: ["Alertar a Carabineros", "Monitorear cámaras cercanas"],
-        confidence: 0.87,
-        notes: "Posible coincidencia con otro reporte previo"
-      }
-    },
-    {
-      id: "550e8400-e29b-41d4-a716-446655440004",
-      name: "ABCD12 - Avistamiento Los Leones",
-      lat: -33.4089,
-      lng: -70.5289,
-      type: "high-confidence",
-      rating: 92,
-      description: "Sedán gris Toyota - Secuencia del mismo vehículo",
-      report: {
-        reportId: "550e8400-e29b-41d4-a716-446655440004",
-        title: "Avistamiento posterior - mismo vehículo",
-        summary: "El mismo vehículo sospechoso avistado en nueva ubicación.",
-        incidentDatetime: "2025-09-30T11:15:00Z",
-        location: { address: "Av. Los Leones 456, Las Condes", latitude: -33.4089, longitude: -70.5289 },
-        licensePlate: "ABCD12",
-        vehicleDescription: "Sedán gris, marca Toyota",
-        imageDescriptionRaw: "Mayor claridad en imagen de seguimiento",
-        timelineDeVistas: [{ index: 1, address: "Av. Los Leones 456", datetime: "2025-09-30T11:15:00Z", source: "cámara de tráfico", notes: "Vehículo moviéndose hacia el oriente" }],
-        lastKnownPosition: { address: "Av. Apoquindo 4500", datetime: "2025-09-30T11:30:00Z" },
-        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
-        recommendedActions: ["Continuar seguimiento", "Coordinar interceptación"],
-        confidence: 0.92,
-        notes: "Confirmada secuencia del vehículo original"
-      }
-    },
-    {
-      id: "550e8400-e29b-41d4-a716-446655440005",
-      name: "ABCD12 - Avistamiento Apoquindo",
-      lat: -33.4056,
-      lng: -70.5112,
-      type: "high-confidence",
-      rating: 89,
-      description: "Sedán gris Toyota - Continuación de secuencia",
-      report: {
-        reportId: "550e8400-e29b-41d4-a716-446655440005",
-        title: "Tercer avistamiento - confirmación de ruta",
-        summary: "Confirmación de la ruta del vehículo sospechoso hacia Las Condes.",
-        incidentDatetime: "2025-09-30T11:45:00Z",
-        location: { address: "Av. Apoquindo 4500, Las Condes", latitude: -33.4056, longitude: -70.5112 },
-        licensePlate: "ABCD12",
-        vehicleDescription: "Sedán gris, marca Toyota",
-        imageDescriptionRaw: "Imagen clara de perfil del vehículo",
-        timelineDeVistas: [{ index: 1, address: "Av. Apoquindo 4500", datetime: "2025-09-30T11:45:00Z", source: "cámara de tráfico", notes: "Vehículo avanzando hacia el oriente" }],
-        lastKnownPosition: { address: "Av. El Bosque Norte 500", datetime: "2025-09-30T12:00:00Z" },
-        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
-        recommendedActions: ["Interceptar en siguiente semáforo", "Coordinar patrullas"],
-        confidence: 0.89,
-        notes: "Ruta confirmada hacia sector empresarial"
-      }
-    }
-  ],
-  'medium-confidence': [
-    {
-      id: "550e8400-e29b-41d4-a716-446655440001",
-      name: "Robo Confirmado - XYZ789",
-      lat: -33.4178,
-      lng: -70.5456,
-      type: "medium-confidence",
-      rating: 75,
-      description: "SUV negro Hyundai - Confianza: 75%",
-      report: {
-        reportId: "550e8400-e29b-41d4-a716-446655440001",
-        title: "Posible robo de vehículo",
-        summary: "Posible robo de SUV negro en estacionamiento comercial.",
-        incidentDatetime: "2025-09-30T14:15:00Z",
-        location: { address: "Costanera Center, Las Condes", latitude: -33.4178, longitude: -70.5456 },
-        licensePlate: "ABCD12",
-        vehicleDescription: "SUV negro, marca Hyundai",
-        imageDescriptionRaw: "Imagen parcialmente obstruida",
-        timelineDeVistas: [{ index: 1, address: "Costanera Center - Estacionamiento", datetime: "2025-09-30T14:15:00Z", source: "cámara privada", notes: "Actividad sospechosa en estacionamiento" }],
-        lastKnownPosition: { address: "Av. Apoquindo 3000", datetime: "2025-09-30T14:30:00Z" },
-        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
-        recommendedActions: ["Verificar con propietario", "Monitorear área"],
-        confidence: 0.75,
-        notes: "Requiere confirmación adicional"
-      }
-    },
-    {
-      id: "550e8400-e29b-41d4-a716-446655440002",
-      name: "Actividad Sospechosa - DEFG34",
-      lat: -33.4372,
-      lng: -70.6506,
-      type: "medium-confidence",
-      rating: 68,
-      description: "Pickup blanca Ford - Confianza: 68%",
-      report: {
-        reportId: "550e8400-e29b-41d4-a716-446655440002",
-        title: "Actividad sospechosa",
-        summary: "Vehículo en actividad sospechosa cerca de residencias.",
-        incidentDatetime: "2025-09-30T16:20:00Z",
-        location: { address: "Calle Merced 456, Santiago Centro", latitude: -33.4372, longitude: -70.6506 },
-        licensePlate: "DEFG34",
-        vehicleDescription: "Pickup blanca, marca Ford",
-        imageDescriptionRaw: "Imagen nocturna con baja visibilidad",
-        timelineDeVistas: [{ index: 1, address: "Calle Merced 456", datetime: "2025-09-30T16:20:00Z", source: "cámara residencial", notes: "Vehículo detenido por tiempo prolongado" }],
-        lastKnownPosition: { address: "Av. Libertador B. O'Higgins 1000", datetime: "2025-09-30T16:45:00Z" },
-        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
-        recommendedActions: ["Patrullaje en la zona", "Verificar antecedentes"],
-        confidence: 0.68,
-        notes: "Imagen de baja calidad, requiere verificación"
-      }
-    }
-  ],
-  'low-confidence': [
-    {
-      id: "550e8400-e29b-41d4-a716-446655440003",
-      name: "Alerta Menor - HIJK56",
-      lat: -33.4489,
-      lng: -70.6693,
-      type: "low-confidence",
-      rating: 45,
-      description: "Hatchback azul Nissan - Confianza: 45%",
-      report: {
-        reportId: "550e8400-e29b-41d4-a716-446655440003",
-        title: "Alerta de bajo nivel",
-        summary: "Posible coincidencia con patrón de búsqueda.",
-        incidentDatetime: "2025-09-30T18:10:00Z",
-        location: { address: "Av. Matta 789, Santiago", latitude: -33.4489, longitude: -70.6693 },
-        licensePlate: "HIJK56",
-        vehicleDescription: "Hatchback azul, marca Nissan",
-        imageDescriptionRaw: "Imagen muy borrosa, difícil identificación",
-        timelineDeVistas: [{ index: 1, address: "Av. Matta 789", datetime: "2025-09-30T18:10:00Z", source: "cámara móvil", notes: "Posible coincidencia en algoritmo" }],
-        lastKnownPosition: { address: "Av. Matta 789", datetime: "2025-09-30T18:10:00Z" },
-        evidence: ["https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"],
-        recommendedActions: ["Revisar manualmente", "Descartar si no hay coincidencias"],
-        confidence: 0.45,
-        notes: "Confianza muy baja, posible falso positivo"
-      }
-    }
-  ]
-}
-
-/** ─────────────────────────────
- *  Página
+ *  Mapa (carga dinámica)
  *  ───────────────────────────── */
 export default function Home() {
+  // Hook para obtener datos de la API
+  const { allReports, groupedReports, loading, error, usingMockData, refreshReports } = useReports();
+  
   const [selectedConfidence, setSelectedConfidence] = useState<Confidence[]>(['high-confidence', 'medium-confidence', 'low-confidence'])
   const [selectedReport, setSelectedReport] = useState<PointOfInterest | null>(null)
 
-  // NUEVO: búsqueda y orden
+  // Búsqueda y orden
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'confidence' | 'time'>('confidence')
 
-  // Base: todo el universo
-  const allData = useMemo(
-    () => (['high-confidence','medium-confidence','low-confidence'] as Confidence[])
-      .flatMap(k => mockCrimeData[k]),
-    []
-  )
-
-  // Conteos por confianza (para los chips)
+  // Conteos por confianza
   const counts = useMemo(() => ({
-    high: mockCrimeData['high-confidence'].length,
-    medium: mockCrimeData['medium-confidence'].length,
-    low: mockCrimeData['low-confidence'].length,
-  }), [])
+    high: groupedReports['high-confidence'].length,
+    medium: groupedReports['medium-confidence'].length,
+    low: groupedReports['low-confidence'].length,
+  }), [groupedReports])
 
   // Filtrado por confianza + búsqueda + orden
   const filteredData = useMemo(() => {
-    const confidenceFiltered = allData.filter(d => selectedConfidence.includes(d.type))
+    const confidenceFiltered = allReports.filter(d => selectedConfidence.includes(d.type))
     const searched = confidenceFiltered.filter(d => {
       if (!searchQuery.trim()) return true
       const q = searchQuery.toLowerCase()
@@ -296,7 +81,7 @@ export default function Home() {
       return new Date(b.report.incidentDatetime).getTime() - new Date(a.report.incidentDatetime).getTime()
     })
     return sorted
-  }, [allData, selectedConfidence, searchQuery, sortBy])
+  }, [allReports, selectedConfidence, searchQuery, sortBy])
 
   const handleMarkerClick = (report: PointOfInterest) => setSelectedReport(report)
   const handleMapClick = () => setSelectedReport(null)
@@ -328,8 +113,21 @@ export default function Home() {
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-lg font-semibold text-gray-900">Monitor de Seguridad</h1>
+              {loading && <p className="text-xs text-blue-600 mt-1">Cargando reportes...</p>}
+              {error && !usingMockData && <p className="text-xs text-red-600 mt-1">Error: {error}</p>}
+              {usingMockData && <p className="text-xs text-orange-600 mt-1">⚠️ Usando datos de demostración</p>}
             </div>
-            <span className="text-[10px] text-gray-500 mt-1">Actualizado {timeAgo(Date.now())}</span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={refreshReports}
+                disabled={loading}
+                className="text-xs text-gray-500 hover:text-gray-700 p-1 rounded disabled:opacity-50"
+                aria-label="Actualizar reportes"
+              >
+                🔄
+              </button>
+              <span className="text-[10px] text-gray-500 mt-1">Actualizado {timeAgo(Date.now())}</span>
+            </div>
           </div>
 
           {/* Búsqueda y orden */}
