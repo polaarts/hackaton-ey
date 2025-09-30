@@ -1,0 +1,164 @@
+[
+  {
+    "reportId": "a54b59b8-4a30-4fb1-8c85-a3decdc8f769",
+    "title": "Stolen Delivery Van in Industrial Park",
+    "summary": "Delivery van stolen from loading dock; last seen heading east on I-80 frontage road.",
+    "incidentDatetime": "2025-09-15T09:42:00.000Z",
+    "licensePlate": "6KZP221",
+    "vehicleDescription": "White 2020 Ford Transit with company logo on side panel",
+    "imageDescriptionRaw": "White van with dented rear bumper captured on security camera",
+    "confidence": 0.88,
+    "notes": "Driver left vehicle running during quick drop-off; no witnesses identified yet.",
+    "location": {
+      "address": "4850 Industrial Park Dr, Oakland, CA",
+      "latitude": 37.785421,
+      "longitude": -122.278339
+    },
+    "timelineEvents": [
+      {
+        "index": 0,
+        "address": "4850 Industrial Park Dr, Oakland, CA",
+        "datetime": "2025-09-15T09:40:00.000Z",
+        "source": "Security Camera",
+        "notes": "Van parked at loading dock"
+      },
+      {
+        "index": 1,
+        "address": "4850 Industrial Park Dr, Oakland, CA",
+        "datetime": "2025-09-15T09:42:00.000Z",
+        "source": "Security Camera",
+        "notes": "Unknown individual enters van and drives off"
+      },
+      {
+        "index": 2,
+        "address": "Frontage Rd & 36th St, Emeryville, CA",
+        "datetime": "2025-09-15T09:51:00.000Z",
+        "source": "Traffic Camera",
+        "notes": "Van heading east on I-80 frontage road"
+      }
+    ],
+    "lastKnownPosition": {
+      "address": "Frontage Rd & 36th St, Emeryville, CA",
+      "datetime": "2025-09-15T09:51:00.000Z"
+    },
+    "evidence": [
+      "https://example.com/evidence/van-camera-clip.mp4",
+      "https://example.com/evidence/van-still.jpg"
+    ],
+    "recommendedActions": [
+      "Alert local patrol units to monitor I-80 exits",
+      "Notify neighboring businesses to secure loading areas"
+    ],
+    "createdAt": "2025-09-15T09:43:12.000Z",
+    "updatedAt": "2025-09-15T09:52:30.000Z"
+  },
+  {
+    "reportId": "568d0a1a-97aa-4d85-9ac8-89d384cd0a96",
+    "title": "Catalytic Converter Theft",
+    "summary": "Catalytic converter stolen from parked hybrid sedan overnight.",
+    "incidentDatetime": "2025-09-12T02:15:00.000Z",
+    "licensePlate": "8HXC987",
+    "vehicleDescription": "Silver 2017 Toyota Prius",
+    "imageDescriptionRaw": "Grainy nighttime footage showing suspect wearing dark hoodie",
+    "confidence": 0.76,
+    "notes": "Owner discovered damage during morning commute; similar incidents in area recently reported.",
+    "location": {
+      "address": "2200 Webster St, San Francisco, CA",
+      "latitude": 37.794612,
+      "longitude": -122.433519
+    },
+    "timelineEvents": [
+      {
+        "index": 0,
+        "address": "2200 Webster St, San Francisco, CA",
+        "datetime": "2025-09-11T23:00:00.000Z",
+        "source": "Owner",
+        "notes": "Vehicle parked on street"
+      },
+      {
+        "index": 1,
+        "address": "2200 Webster St, San Francisco, CA",
+        "datetime": "2025-09-12T02:15:00.000Z",
+        "source": "Security Camera",
+        "notes": "Two suspects seen under vehicle; loud sawing noises recorded"
+      },
+      {
+        "index": 2,
+        "address": "2200 Webster St, San Francisco, CA",
+        "datetime": "2025-09-12T07:30:00.000Z",
+        "source": "Owner",
+        "notes": "Damage discovered; catalytic converter missing"
+      }
+    ],
+    "lastKnownPosition": null,
+    "evidence": [
+      "https://example.com/evidence/prius-security-cam.mp4"
+    ],
+    "recommendedActions": [
+      "Increase overnight patrols in affected neighborhood",
+      "Publish community alert on catalytic converter theft prevention"
+    ],
+    "createdAt": "2025-09-12T07:45:00.000Z",
+    "updatedAt": "2025-09-12T08:10:00.000Z"
+  },
+  {
+    "reportId": "c1df2ed0-7b19-4b8e-97bf-60c1af1f1181",
+    "title": "Motorcycle Theft from Parking Garage",
+    "summary": "High-end motorcycle stolen from secured residential garage during early morning hours.",
+    "incidentDatetime": "2025-09-10T05:30:00.000Z",
+    "licensePlate": "2MTR567",
+    "vehicleDescription": "Black 2023 Ducati Panigale V4",
+    "imageDescriptionRaw": "Photos of cut lock and abandoned helmet",
+    "confidence": 0.93,
+    "notes": "Garage access logs show key fob clone likely used; multiple units targeted recently.",
+    "location": {
+      "address": "150 Mission St, San Francisco, CA",
+      "latitude": 37.791108,
+      "longitude": -122.392541
+    },
+    "timelineEvents": [
+      {
+        "index": 0,
+        "address": "150 Mission St, San Francisco, CA",
+        "datetime": "2025-09-10T05:20:00.000Z",
+        "source": "Garage Access Logs",
+        "notes": "Unauthorized key fob access recorded"
+      },
+      {
+        "index": 1,
+        "address": "150 Mission St, San Francisco, CA",
+        "datetime": "2025-09-10T05:24:00.000Z",
+        "source": "Security Camera",
+        "notes": "Suspect wearing high-visibility vest seen entering garage"
+      },
+      {
+        "index": 2,
+        "address": "150 Mission St, San Francisco, CA",
+        "datetime": "2025-09-10T05:30:00.000Z",
+        "source": "Security Camera",
+        "notes": "Motorcycle ridden out of garage"
+      },
+      {
+        "index": 3,
+        "address": "Embarcadero Fwy On-Ramp, San Francisco, CA",
+        "datetime": "2025-09-10T05:36:00.000Z",
+        "source": "Traffic Camera",
+        "notes": "Motorcycle heading southbound"
+      }
+    ],
+    "lastKnownPosition": {
+      "address": "Embarcadero Fwy On-Ramp, San Francisco, CA",
+      "datetime": "2025-09-10T05:36:00.000Z"
+    },
+    "evidence": [
+      "https://example.com/evidence/ducati-camera.mp4",
+      "https://example.com/evidence/ducati-lock-photo.jpg"
+    ],
+    "recommendedActions": [
+      "Coordinate with neighboring garages to review access logs",
+      "Check regional databases for similar key fob cloning incidents"
+    ],
+    "createdAt": "2025-09-10T05:40:00.000Z",
+    "updatedAt": "2025-09-10T06:05:00.000Z"
+  }
+]
