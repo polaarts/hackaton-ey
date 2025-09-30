@@ -83,9 +83,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Initialize map centered in Las Condes, Santiago, Chile
+      // Initialize map centered in Región Metropolitana de Santiago
       if (!mapRef.current) {
-        mapRef.current = L.map('map').setView([-33.4134, -70.5398], 14);
+        mapRef.current = L.map('map').setView([-33.4569, -70.6483], 10);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -179,8 +179,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
 
       {/* Map Controls Info */}
       <div className="absolute top-4 right-4 bg-white p-2 rounded shadow-lg border z-[1000]">
-        <p className="text-xs text-gray-600">Las Condes, Santiago</p>
-        <p className="text-xs text-gray-500">Haz clic en los marcadores</p>
+        <p className="text-xs text-gray-600">Región Metropolitana</p>
+        <p className="text-xs text-gray-500">Santiago, Chile</p>
       </div>
     </div>
   );

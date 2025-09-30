@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Las Condes Explorer - Santiago, Chile",
-  description: "Explora los mejores lugares de Las Condes con nuestro mapa interactivo",
+  title: "Región Metropolitana Explorer - Santiago, Chile",
+  description: "Explora los mejores lugares de la Región Metropolitana con nuestro mapa interactivo",
 };
 
 export default function RootLayout({

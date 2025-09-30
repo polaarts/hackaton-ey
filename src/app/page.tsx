@@ -26,34 +26,61 @@ const MapComponent = dynamic(() => import('../components/MapComponent'), {
   loading: () => <div className="h-96 bg-gray-200 flex items-center justify-center">Cargando mapa...</div>
 });
 
-// Mock data for Las Condes, Santiago - Chile
+// Mock data for Región Metropolitana de Santiago - Chile
 const mockData = {
   restaurants: [
-    { id: 1, name: 'Boragó', lat: -33.4126, lng: -70.5447, type: 'restaurant', rating: 4.8, description: 'Restaurante galardonado con cocina chilena contemporánea' },
-    { id: 2, name: 'Osaka', lat: -33.4156, lng: -70.5389, type: 'restaurant', rating: 4.6, description: 'Fusión nikkei con ingredientes locales' },
-    { id: 3, name: 'Aquí Está Coco', lat: -33.4089, lng: -70.5412, type: 'restaurant', rating: 4.4, description: 'Auténtica cocina peruana en Las Condes' },
-    { id: 4, name: 'La Mar', lat: -33.4134, lng: -70.5378, type: 'restaurant', rating: 4.5, description: 'Cevichería y cocina marina peruana' },
-    { id: 5, name: 'Mestizo', lat: -33.4178, lng: -70.5445, type: 'restaurant', rating: 4.3, description: 'Cocina chilena con vista panorámica' },
+    // Las Condes
+    { id: 1, name: 'Boragó', lat: -33.4126, lng: -70.5447, type: 'restaurant', rating: 4.8, description: 'Restaurante galardonado con cocina chilena contemporánea - Las Condes' },
+    { id: 2, name: 'Osaka', lat: -33.4156, lng: -70.5389, type: 'restaurant', rating: 4.6, description: 'Fusión nikkei con ingredientes locales - Las Condes' },
+    // Providencia
+    { id: 3, name: 'Ambrosía', lat: -33.4372, lng: -70.6106, type: 'restaurant', rating: 4.5, description: 'Bistró francés con ambiente acogedor - Providencia' },
+    // Santiago Centro
+    { id: 4, name: 'Galindo', lat: -33.4378, lng: -70.6504, type: 'restaurant', rating: 4.3, description: 'Comida chilena tradicional desde 1896 - Santiago Centro' },
+    // Vitacura
+    { id: 5, name: 'Mestizo', lat: -33.3978, lng: -70.5445, type: 'restaurant', rating: 4.4, description: 'Cocina chilena con vista panorámica - Vitacura' },
+    // Ñuñoa
+    { id: 6, name: 'Fuente Alemana', lat: -33.4578, lng: -70.5978, type: 'restaurant', rating: 4.2, description: 'Famosos completos italianos - Ñuñoa' },
   ],
   hotels: [
-    { id: 6, name: 'The Ritz-Carlton Santiago', lat: -33.4142, lng: -70.5398, type: 'hotel', rating: 4.9, description: 'Hotel de lujo en el corazón de Las Condes' },
-    { id: 7, name: 'Grand Hyatt Santiago', lat: -33.4167, lng: -70.5423, type: 'hotel', rating: 4.7, description: 'Elegante hotel con spa y vistas de la cordillera' },
-    { id: 8, name: 'W Santiago', lat: -33.4156, lng: -70.5389, type: 'hotel', rating: 4.6, description: 'Hotel boutique moderno y vibrante' },
-    { id: 9, name: 'Hotel Kennedy', lat: -33.4134, lng: -70.5412, type: 'hotel', rating: 4.2, description: 'Hotel ejecutivo en zona comercial' },
+    // Las Condes
+    { id: 7, name: 'The Ritz-Carlton Santiago', lat: -33.4142, lng: -70.5398, type: 'hotel', rating: 4.9, description: 'Hotel de lujo en el corazón financiero - Las Condes' },
+    // Providencia
+    { id: 8, name: 'Hotel Orly', lat: -33.4322, lng: -70.6156, type: 'hotel', rating: 4.1, description: 'Hotel boutique en barrio Providencia' },
+    // Santiago Centro
+    { id: 9, name: 'Hotel Plaza San Francisco', lat: -33.4428, lng: -70.6506, type: 'hotel', rating: 4.3, description: 'Hotel histórico en el centro de Santiago' },
+    // Vitacura
+    { id: 10, name: 'W Santiago', lat: -33.4056, lng: -70.5289, type: 'hotel', rating: 4.6, description: 'Hotel moderno y vibrante - Vitacura' },
+    // Lo Barnechea
+    { id: 11, name: 'Hotel Cumbres Vitacura', lat: -33.3789, lng: -70.5234, type: 'hotel', rating: 4.4, description: 'Hotel con vista a la cordillera - Lo Barnechea' },
   ],
   attractions: [
-    { id: 10, name: 'Costanera Center', lat: -33.4178, lng: -70.5456, type: 'attraction', rating: 4.5, description: 'Centro comercial y torre más alta de América Latina' },
-    { id: 11, name: 'Parque Araucano', lat: -33.4123, lng: -70.5334, type: 'attraction', rating: 4.4, description: 'Amplio parque urbano ideal para familias' },
-    { id: 12, name: 'Centro Comercial Alto Las Condes', lat: -33.4089, lng: -70.5298, type: 'attraction', rating: 4.3, description: 'Exclusivo centro comercial al aire libre' },
-    { id: 13, name: 'Kidzania Santiago', lat: -33.4156, lng: -70.5445, type: 'attraction', rating: 4.6, description: 'Ciudad interactiva para niños' },
-    { id: 14, name: 'Club de Golf Los Leones', lat: -33.4045, lng: -70.5289, type: 'attraction', rating: 4.7, description: 'Prestigioso club de golf con vista a la cordillera' },
-    { id: 15, name: 'Museo de la Moda', lat: -33.4167, lng: -70.5378, type: 'attraction', rating: 4.2, description: 'Museo dedicado a la moda y el diseño' },
+    // Las Condes
+    { id: 12, name: 'Costanera Center', lat: -33.4178, lng: -70.5456, type: 'attraction', rating: 4.5, description: 'Torre más alta de América Latina - Las Condes' },
+    { id: 13, name: 'Parque Araucano', lat: -33.4123, lng: -70.5334, type: 'attraction', rating: 4.4, description: 'Amplio parque urbano - Las Condes' },
+    // Santiago Centro
+    { id: 14, name: 'Plaza de Armas', lat: -33.4378, lng: -70.6504, type: 'attraction', rating: 4.3, description: 'Plaza principal de Santiago - Centro Histórico' },
+    { id: 15, name: 'Palacio de La Moneda', lat: -33.4428, lng: -70.6506, type: 'attraction', rating: 4.6, description: 'Palacio presidencial de Chile - Santiago Centro' },
+    { id: 16, name: 'Cerro San Cristóbal', lat: -33.4234, lng: -70.6334, type: 'attraction', rating: 4.7, description: 'Mirador con vista panorámica de Santiago' },
+    // Providencia
+    { id: 17, name: 'Cerro San Cristóbal - Teleférico', lat: -33.4156, lng: -70.6234, type: 'attraction', rating: 4.5, description: 'Teleférico al cerro más famoso - Providencia' },
+    // Maipú
+    { id: 18, name: 'Templo Votivo de Maipú', lat: -33.5067, lng: -70.7589, type: 'attraction', rating: 4.2, description: 'Santuario nacional de Chile - Maipú' },
+    // Pirque
+    { id: 19, name: 'Viña Concha y Toro', lat: -33.6667, lng: -70.5789, type: 'attraction', rating: 4.6, description: 'Viña histórica y tours - Pirque' },
   ],
   services: [
-    { id: 16, name: 'Clínica Las Condes', lat: -33.4134, lng: -70.5356, type: 'service', rating: 4.8, description: 'Prestigioso centro médico privado' },
-    { id: 17, name: 'Universidad Adolfo Ibáñez', lat: -33.4098, lng: -70.5267, type: 'service', rating: 4.5, description: 'Universidad privada de prestigio' },
-    { id: 18, name: 'Metro Escuela Militar', lat: -33.4156, lng: -70.5423, type: 'service', rating: 4.0, description: 'Estación de metro línea 1' },
-    { id: 19, name: 'Metro Los Leones', lat: -33.4089, lng: -70.5289, type: 'service', rating: 4.0, description: 'Estación de metro línea 1' },
+    // Las Condes
+    { id: 20, name: 'Clínica Las Condes', lat: -33.4134, lng: -70.5356, type: 'service', rating: 4.8, description: 'Centro médico de excelencia - Las Condes' },
+    // Santiago Centro
+    { id: 21, name: 'Hospital Salvador', lat: -33.4445, lng: -70.6234, type: 'service', rating: 4.2, description: 'Hospital público de referencia - Santiago Centro' },
+    // Providencia
+    { id: 22, name: 'Universidad Católica', lat: -33.4389, lng: -70.6378, type: 'service', rating: 4.6, description: 'Universidad pontificia - Providencia' },
+    // Ñuñoa
+    { id: 23, name: 'Estadio Nacional', lat: -33.4634, lng: -70.6098, type: 'service', rating: 4.4, description: 'Estadio nacional de Chile - Ñuñoa' },
+    // Vitacura
+    { id: 24, name: 'Clínica Alemana', lat: -33.3889, lng: -70.5456, type: 'service', rating: 4.7, description: 'Centro médico privado - Vitacura' },
+    // Puente Alto
+    { id: 25, name: 'Hospital Sótero del Río', lat: -33.6123, lng: -70.5789, type: 'service', rating: 4.1, description: 'Hospital de alta complejidad - Puente Alto' },
   ]
 };
 
@@ -97,7 +124,7 @@ export default function Home() {
       <div className="w-80 bg-white shadow-lg border-l flex flex-col">
         {/* Header */}
         <div className="p-4 border-b bg-gray-50">
-          <h1 className="text-lg font-bold text-gray-900">🗺️ Las Condes</h1>
+          <h1 className="text-lg font-bold text-gray-900">🗺️ Región Metropolitana</h1>
           <p className="text-xs text-gray-500 mt-1">
             Santiago, Chile • {filteredData.length} lugares
           </p>
