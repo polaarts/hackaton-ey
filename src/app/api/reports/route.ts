@@ -33,12 +33,18 @@ function logError(message: string, context: Record<string, unknown> = {}) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const startTime = searchParams.get("start_time");
-  const endTime = searchParams.get("end_time");
+  let startTime = searchParams.get("start_time");
+  let endTime = searchParams.get("end_time");
 
+  // Si no se proporcionan fechas, usar la última semana por defecto
   if (!startTime || !endTime) {
-    logInfo("Missing query parameters", { startTime, endTime });
-    return jsonResponse(INVALID_PARAMETERS_RESPONSE, 400);
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    startTime = oneWeekAgo.toISOString();
+    endTime = now.toISOString();
+    
+    logInfo("Using default date range (last week)", { startTime, endTime });
   }
 
   let start: Date;
