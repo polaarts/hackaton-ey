@@ -53,6 +53,7 @@ interface MapPoint {
 interface MapComponentProps {
   data: MapPoint[];
   onMarkerClick: (point: MapPoint) => void;
+  onMapClick: () => void;
   selectedReport: MapPoint | null;
 }
 
@@ -111,7 +112,7 @@ const getMarkerIcon = (type: string, isSelected: boolean = false, isRelated: boo
   });
 };
 
-const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, selectedReport }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, onMapClick, selectedReport }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const polylinesRef = useRef<L.Polyline[]>([]);
@@ -145,6 +146,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, select
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(mapRef.current);
+
+        // Add click event to map for deselection
+        mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
+          // Only trigger deselection if the click is not on a marker
+          onMapClick();
+        });
       }
 
       // Clear existing markers and polylines
@@ -186,7 +193,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, select
         `);
 
         // Add click event
-        marker.on('click', () => {
+        marker.on('click', (e: L.LeafletMouseEvent) => {
+          L.DomEvent.stopPropagation(e); // Prevent event from bubbling to map
           onMarkerClick(point);
         });
 
@@ -247,7 +255,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, select
         mapRef.current.fitBounds(group.getBounds().pad(0.1));
       }
     }
-  }, [data, selectedReport, onMarkerClick, relatedEvents]);
+  }, [data, selectedReport, onMarkerClick, onMapClick, relatedEvents]);
 
   useEffect(() => {
     // Center map on selected point

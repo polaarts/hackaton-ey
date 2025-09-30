@@ -339,6 +339,10 @@ export default function Home() {
     setSelectedReport(report)
   }
 
+  const handleMapClick = () => {
+    setSelectedReport(null)
+  }
+
   const handleConfidenceChange = (confidence: string) => {
     setSelectedConfidence(prev => 
       prev.includes(confidence)
@@ -354,6 +358,7 @@ export default function Home() {
         <MapComponent 
           data={filteredData}
           onMarkerClick={handleMarkerClick}
+          onMapClick={handleMapClick}
           selectedReport={selectedReport}
         />
       </div>
