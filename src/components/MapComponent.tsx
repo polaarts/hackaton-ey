@@ -74,8 +74,14 @@ const getTypeEmoji = (type: string) => {
   }
 };
 
-const getMarkerIcon = (type: string, isSelected: boolean = false) => {
-  const color = isSelected ? '#3b82f6' : getTypeColor(type);
+const getMarkerIcon = (type: string, isSelected: boolean = false, isRelated: boolean = false) => {
+  let color = getTypeColor(type);
+  
+  if (isSelected) {
+    color = '#3b82f6'; // blue for selected
+  } else if (isRelated) {
+    color = '#8b5cf6'; // purple for related events
+  }
   
   return L.divIcon({
     html: `
@@ -108,6 +114,26 @@ const getMarkerIcon = (type: string, isSelected: boolean = false) => {
 const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, selectedReport }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const polylinesRef = useRef<L.Polyline[]>([]);
+
+  // Group points by license plate for drawing connections
+  const groupedByLicense = useMemo(() => {
+    const groups: { [key: string]: MapPoint[] } = {};
+    data.forEach(point => {
+      const license = point.report.licensePlate;
+      if (!groups[license]) {
+        groups[license] = [];
+      }
+      groups[license].push(point);
+    });
+    return groups;
+  }, [data]);
+
+  // Get related events for selected report (same license plate)
+  const relatedEvents = useMemo(() => {
+    if (!selectedReport) return [];
+    return groupedByLicense[selectedReport.report.licensePlate] || [];
+  }, [selectedReport, groupedByLicense]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -121,15 +147,22 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, select
         }).addTo(mapRef.current);
       }
 
-      // Clear existing markers
+      // Clear existing markers and polylines
       markersRef.current.forEach(marker => marker.remove());
+      polylinesRef.current.forEach(polyline => polyline.remove());
       markersRef.current = [];
+      polylinesRef.current = [];
 
       // Add new markers
       data.forEach(point => {
         const isSelected = selectedReport?.id === point.id;
+        const isRelated = selectedReport && 
+                         point.report.licensePlate === selectedReport.report.licensePlate && 
+                         point.id !== selectedReport.id &&
+                         relatedEvents.length > 1;
+        
         const marker = L.marker([point.lat, point.lng], {
-          icon: getMarkerIcon(point.type, isSelected)
+          icon: getMarkerIcon(point.type, isSelected, isRelated || false)
         }).addTo(mapRef.current!);
 
         // Add popup
@@ -160,13 +193,61 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, select
         markersRef.current.push(marker);
       });
 
-      // Fit map to show all markers if there are any
-      if (data.length > 0) {
+      // Only add polylines if there's a selected report AND it has related events
+      if (selectedReport && relatedEvents.length > 1) {
+        // Sort events by datetime for chronological connections
+        const sortedEvents = relatedEvents.sort((a, b) => 
+          new Date(a.report.incidentDatetime).getTime() - new Date(b.report.incidentDatetime).getTime()
+        );
+
+        // Create lines connecting consecutive events
+        for (let i = 0; i < sortedEvents.length - 1; i++) {
+          const startPoint = sortedEvents[i];
+          const endPoint = sortedEvents[i + 1];
+          
+          const polyline = L.polyline([
+            [startPoint.lat, startPoint.lng],
+            [endPoint.lat, endPoint.lng]
+          ], {
+            color: '#3b82f6', // blue-500
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '5, 10'
+          }).addTo(mapRef.current!);
+
+          // Add popup to the polyline
+          const linePopupContent = `
+            <div style="padding: 8px;">
+              <h4 style="margin: 0 0 4px 0; font-weight: bold; color: #3b82f6; font-size: 14px;">
+                🔗 Trazado: ${selectedReport.report.licensePlate}
+              </h4>
+              <div style="font-size: 12px; color: #6b7280;">
+                <div><strong>Desde:</strong> ${startPoint.report.location.address}</div>
+                <div><strong>Hasta:</strong> ${endPoint.report.location.address}</div>
+                <div><strong>Tiempo:</strong> ${new Date(startPoint.report.incidentDatetime).toLocaleTimeString('es-CL')} → ${new Date(endPoint.report.incidentDatetime).toLocaleTimeString('es-CL')}</div>
+              </div>
+            </div>
+          `;
+          
+          polyline.bindPopup(linePopupContent);
+          polylinesRef.current.push(polyline);
+        }
+
+        // Fit map to show all related events when there's a selection
+        const relatedMarkers = markersRef.current.filter((marker, index) => 
+          relatedEvents.some(event => data[index]?.id === event.id)
+        );
+        if (relatedMarkers.length > 0) {
+          const group = L.featureGroup(relatedMarkers);
+          mapRef.current.fitBounds(group.getBounds().pad(0.1));
+        }
+      } else if (data.length > 0 && !selectedReport) {
+        // Fit map to show all markers if no selection
         const group = L.featureGroup(markersRef.current);
         mapRef.current.fitBounds(group.getBounds().pad(0.1));
       }
     }
-  }, [data, selectedReport, onMarkerClick]);
+  }, [data, selectedReport, onMarkerClick, relatedEvents]);
 
   useEffect(() => {
     // Center map on selected point
@@ -202,6 +283,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, select
           <div className="flex items-center text-xs">
             <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#16a34a' }}></div>
             Baja Confianza (&lt;50%)
+          </div>
+          <hr className="my-2 border-gray-200" />
+          <div className="flex items-center text-xs">
+            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#3b82f6' }}></div>
+            Evento Seleccionado
+          </div>
+          <div className="flex items-center text-xs">
+            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#8b5cf6' }}></div>
+            Eventos Relacionados
+          </div>
+          <div className="flex items-center text-xs">
+            <div className="w-4 h-1 mr-2 border-t-2 border-dashed" style={{ borderColor: '#3b82f6' }}></div>
+            Trazado de Ruta
           </div>
         </div>
       </div>

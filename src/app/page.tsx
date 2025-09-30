@@ -201,7 +201,7 @@ const mockCrimeData = {
           latitude: -33.4178,
           longitude: -70.5456
         },
-        licensePlate: "XYZ789",
+        licensePlate: "ABCD12",
         vehicleDescription: "SUV negro, marca Hyundai",
         imageDescriptionRaw: "Imagen parcialmente obstruida",
         timelineDeVistas: [
