@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Región Metropolitana Explorer - Santiago, Chile",
-  description: "Explora los mejores lugares de la Región Metropolitana con nuestro mapa interactivo",
+  title: "Monitor de Seguridad Vehicular - Santiago",
+  description: "Sistema de monitoreo y detección de robos de vehículos en tiempo real",
 };
 
 export default function RootLayout({

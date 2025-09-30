@@ -3,15 +3,50 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
-// Type definitions
+// Type definitions for crime reports
+interface Location {
+  address: string;
+  latitude: number;
+  longitude: number;
+}
+
+interface TimelineEntry {
+  index: number;
+  address: string;
+  datetime: string;
+  source: string | null;
+  notes: string | null;
+}
+
+interface CrimeReport {
+  reportId: string;
+  title: string;
+  summary: string;
+  incidentDatetime: string;
+  location: Location;
+  licensePlate: string;
+  vehicleDescription: string;
+  imageDescriptionRaw: string;
+  timelineDeVistas: TimelineEntry[];
+  lastKnownPosition: {
+    address: string;
+    datetime: string;
+  };
+  evidence: string[];
+  recommendedActions: string[];
+  confidence: number;
+  notes: string;
+}
+
 interface MapPoint {
-  id: number;
+  id: string;
   name: string;
   lat: number;
   lng: number;
   type: string;
   rating: number;
   description: string;
+  report: CrimeReport;
 }
 
 interface Category {
@@ -26,70 +61,181 @@ const MapComponent = dynamic(() => import('../components/MapComponent'), {
   loading: () => <div className="h-96 bg-gray-200 flex items-center justify-center">Cargando mapa...</div>
 });
 
-// Mock data for Región Metropolitana de Santiago - Chile
-const mockData = {
-  restaurants: [
-    // Las Condes
-    { id: 1, name: 'Boragó', lat: -33.4126, lng: -70.5447, type: 'restaurant', rating: 4.8, description: 'Restaurante galardonado con cocina chilena contemporánea - Las Condes' },
-    { id: 2, name: 'Osaka', lat: -33.4156, lng: -70.5389, type: 'restaurant', rating: 4.6, description: 'Fusión nikkei con ingredientes locales - Las Condes' },
-    // Providencia
-    { id: 3, name: 'Ambrosía', lat: -33.4372, lng: -70.6106, type: 'restaurant', rating: 4.5, description: 'Bistró francés con ambiente acogedor - Providencia' },
-    // Santiago Centro
-    { id: 4, name: 'Galindo', lat: -33.4378, lng: -70.6504, type: 'restaurant', rating: 4.3, description: 'Comida chilena tradicional desde 1896 - Santiago Centro' },
-    // Vitacura
-    { id: 5, name: 'Mestizo', lat: -33.3978, lng: -70.5445, type: 'restaurant', rating: 4.4, description: 'Cocina chilena con vista panorámica - Vitacura' },
-    // Ñuñoa
-    { id: 6, name: 'Fuente Alemana', lat: -33.4578, lng: -70.5978, type: 'restaurant', rating: 4.2, description: 'Famosos completos italianos - Ñuñoa' },
+// Mock crime data for Región Metropolitana de Santiago - Vehicle Theft Reports
+const mockCrimeData = {
+  'high-confidence': [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      name: "Vehículo Sospechoso - ABCD12",
+      lat: -33.4263,
+      lng: -70.6200,
+      type: "high-confidence",
+      rating: 87,
+      description: "Sedán gris Toyota - Confianza: 87%",
+      report: {
+        reportId: "550e8400-e29b-41d4-a716-446655440000",
+        title: "Vehículo sospechoso",
+        summary: "Avistamiento de un vehículo sospechoso en la vía pública.",
+        incidentDatetime: "2025-09-30T10:30:00Z",
+        location: {
+          address: "Av. Providencia 1234, Santiago, Chile",
+          latitude: -33.4263,
+          longitude: -70.6200
+        },
+        licensePlate: "ABCD12",
+        vehicleDescription: "Sedán gris, marca Toyota",
+        imageDescriptionRaw: "Imagen borrosa captada por cámara de seguridad",
+        timelineDeVistas: [
+          {
+            index: 1,
+            address: "Av. Providencia 1234",
+            datetime: "2025-09-30T10:30:00Z",
+            source: "cámara municipal",
+            notes: "Avistado cerca de la esquina"
+          }
+        ],
+        lastKnownPosition: {
+          address: "Av. Los Leones 456",
+          datetime: "2025-09-30T11:00:00Z"
+        },
+        evidence: ["https://ejemplo.com/evidencia1.jpg"],
+        recommendedActions: ["Alertar a Carabineros", "Monitorear cámaras cercanas"],
+        confidence: 0.87,
+        notes: "Posible coincidencia con otro reporte previo"
+      }
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      name: "Robo Confirmado - XYZ789",
+      lat: -33.4178,
+      lng: -70.5456,
+      type: "high-confidence",
+      rating: 95,
+      description: "SUV negro Hyundai - Confianza: 95%",
+      report: {
+        reportId: "550e8400-e29b-41d4-a716-446655440001",
+        title: "Robo de vehículo confirmado",
+        summary: "Robo de SUV negro en estacionamiento comercial.",
+        incidentDatetime: "2025-09-30T14:15:00Z",
+        location: {
+          address: "Costanera Center, Las Condes",
+          latitude: -33.4178,
+          longitude: -70.5456
+        },
+        licensePlate: "XYZ789",
+        vehicleDescription: "SUV negro, marca Hyundai",
+        imageDescriptionRaw: "Múltiples ángulos de cámaras de seguridad",
+        timelineDeVistas: [
+          {
+            index: 1,
+            address: "Costanera Center - Estacionamiento",
+            datetime: "2025-09-30T14:15:00Z",
+            source: "cámara privada",
+            notes: "Robo en proceso"
+          }
+        ],
+        lastKnownPosition: {
+          address: "Av. Apoquindo 3000",
+          datetime: "2025-09-30T14:30:00Z"
+        },
+        evidence: ["https://ejemplo.com/robo1.mp4", "https://ejemplo.com/robo2.jpg"],
+        recommendedActions: ["Alerta inmediata", "Bloqueo de vías"],
+        confidence: 0.95,
+        notes: "Robo confirmado por múltiples fuentes"
+      }
+    }
   ],
-  hotels: [
-    // Las Condes
-    { id: 7, name: 'The Ritz-Carlton Santiago', lat: -33.4142, lng: -70.5398, type: 'hotel', rating: 4.9, description: 'Hotel de lujo en el corazón financiero - Las Condes' },
-    // Providencia
-    { id: 8, name: 'Hotel Orly', lat: -33.4322, lng: -70.6156, type: 'hotel', rating: 4.1, description: 'Hotel boutique en barrio Providencia' },
-    // Santiago Centro
-    { id: 9, name: 'Hotel Plaza San Francisco', lat: -33.4428, lng: -70.6506, type: 'hotel', rating: 4.3, description: 'Hotel histórico en el centro de Santiago' },
-    // Vitacura
-    { id: 10, name: 'W Santiago', lat: -33.4056, lng: -70.5289, type: 'hotel', rating: 4.6, description: 'Hotel moderno y vibrante - Vitacura' },
-    // Lo Barnechea
-    { id: 11, name: 'Hotel Cumbres Vitacura', lat: -33.3789, lng: -70.5234, type: 'hotel', rating: 4.4, description: 'Hotel con vista a la cordillera - Lo Barnechea' },
+  'medium-confidence': [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440002",
+      name: "Actividad Sospechosa - DEF456",
+      lat: -33.4378,
+      lng: -70.6504,
+      type: "medium-confidence",
+      rating: 65,
+      description: "Hatchback blanco Chevrolet - Confianza: 65%",
+      report: {
+        reportId: "550e8400-e29b-41d4-a716-446655440002",
+        title: "Actividad sospechosa detectada",
+        summary: "Comportamiento inusual en zona comercial.",
+        incidentDatetime: "2025-09-30T16:45:00Z",
+        location: {
+          address: "Plaza de Armas, Santiago Centro",
+          latitude: -33.4378,
+          longitude: -70.6504
+        },
+        licensePlate: "DEF456",
+        vehicleDescription: "Hatchback blanco, marca Chevrolet",
+        imageDescriptionRaw: "Imagen parcialmente obstruida",
+        timelineDeVistas: [
+          {
+            index: 1,
+            address: "Plaza de Armas",
+            datetime: "2025-09-30T16:45:00Z",
+            source: "cámara municipal",
+            notes: "Movimientos erráticos"
+          }
+        ],
+        lastKnownPosition: {
+          address: "Calle Estado 200",
+          datetime: "2025-09-30T17:00:00Z"
+        },
+        evidence: ["https://ejemplo.com/sospecha1.jpg"],
+        recommendedActions: ["Monitoreo continuo"],
+        confidence: 0.65,
+        notes: "Requiere verificación adicional"
+      }
+    }
   ],
-  attractions: [
-    // Las Condes
-    { id: 12, name: 'Costanera Center', lat: -33.4178, lng: -70.5456, type: 'attraction', rating: 4.5, description: 'Torre más alta de América Latina - Las Condes' },
-    { id: 13, name: 'Parque Araucano', lat: -33.4123, lng: -70.5334, type: 'attraction', rating: 4.4, description: 'Amplio parque urbano - Las Condes' },
-    // Santiago Centro
-    { id: 14, name: 'Plaza de Armas', lat: -33.4378, lng: -70.6504, type: 'attraction', rating: 4.3, description: 'Plaza principal de Santiago - Centro Histórico' },
-    { id: 15, name: 'Palacio de La Moneda', lat: -33.4428, lng: -70.6506, type: 'attraction', rating: 4.6, description: 'Palacio presidencial de Chile - Santiago Centro' },
-    { id: 16, name: 'Cerro San Cristóbal', lat: -33.4234, lng: -70.6334, type: 'attraction', rating: 4.7, description: 'Mirador con vista panorámica de Santiago' },
-    // Providencia
-    { id: 17, name: 'Cerro San Cristóbal - Teleférico', lat: -33.4156, lng: -70.6234, type: 'attraction', rating: 4.5, description: 'Teleférico al cerro más famoso - Providencia' },
-    // Maipú
-    { id: 18, name: 'Templo Votivo de Maipú', lat: -33.5067, lng: -70.7589, type: 'attraction', rating: 4.2, description: 'Santuario nacional de Chile - Maipú' },
-    // Pirque
-    { id: 19, name: 'Viña Concha y Toro', lat: -33.6667, lng: -70.5789, type: 'attraction', rating: 4.6, description: 'Viña histórica y tours - Pirque' },
-  ],
-  services: [
-    // Las Condes
-    { id: 20, name: 'Clínica Las Condes', lat: -33.4134, lng: -70.5356, type: 'service', rating: 4.8, description: 'Centro médico de excelencia - Las Condes' },
-    // Santiago Centro
-    { id: 21, name: 'Hospital Salvador', lat: -33.4445, lng: -70.6234, type: 'service', rating: 4.2, description: 'Hospital público de referencia - Santiago Centro' },
-    // Providencia
-    { id: 22, name: 'Universidad Católica', lat: -33.4389, lng: -70.6378, type: 'service', rating: 4.6, description: 'Universidad pontificia - Providencia' },
-    // Ñuñoa
-    { id: 23, name: 'Estadio Nacional', lat: -33.4634, lng: -70.6098, type: 'service', rating: 4.4, description: 'Estadio nacional de Chile - Ñuñoa' },
-    // Vitacura
-    { id: 24, name: 'Clínica Alemana', lat: -33.3889, lng: -70.5456, type: 'service', rating: 4.7, description: 'Centro médico privado - Vitacura' },
-    // Puente Alto
-    { id: 25, name: 'Hospital Sótero del Río', lat: -33.6123, lng: -70.5789, type: 'service', rating: 4.1, description: 'Hospital de alta complejidad - Puente Alto' },
+  'low-confidence': [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440003",
+      name: "Posible Incidente - GHI123",
+      lat: -33.4567,
+      lng: -70.5989,
+      type: "low-confidence",
+      rating: 35,
+      description: "Pickup roja Ford - Confianza: 35%",
+      report: {
+        reportId: "550e8400-e29b-41d4-a716-446655440003",
+        title: "Posible incidente vehicular",
+        summary: "Detección automática requiere verificación.",
+        incidentDatetime: "2025-09-30T19:20:00Z",
+        location: {
+          address: "Ñuñoa, Santiago",
+          latitude: -33.4567,
+          longitude: -70.5989
+        },
+        licensePlate: "GHI123",
+        vehicleDescription: "Pickup roja, marca Ford",
+        imageDescriptionRaw: "Imagen de baja calidad",
+        timelineDeVistas: [
+          {
+            index: 1,
+            address: "Av. Grecia 1500",
+            datetime: "2025-09-30T19:20:00Z",
+            source: "detección automática",
+            notes: "Algoritmo de detección"
+          }
+        ],
+        lastKnownPosition: {
+          address: "Av. Grecia 1500",
+          datetime: "2025-09-30T19:20:00Z"
+        },
+        evidence: ["https://ejemplo.com/auto1.jpg"],
+        recommendedActions: ["Revisión manual"],
+        confidence: 0.35,
+        notes: "Baja confianza, posible falso positivo"
+      }
+    }
   ]
 };
 
 const categories: Category[] = [
-  { key: 'all', label: 'Todos', icon: '🗺️' },
-  { key: 'restaurants', label: 'Restaurantes', icon: '🍽️' },
-  { key: 'hotels', label: 'Hoteles', icon: '🏨' },
-  { key: 'attractions', label: 'Atracciones', icon: '🎭' },
-  { key: 'services', label: 'Servicios', icon: '🏥' },
+  { key: 'all', label: 'Todos los Reportes', icon: '🚨' },
+  { key: 'high-confidence', label: 'Alta Confianza', icon: '🔴' },
+  { key: 'medium-confidence', label: 'Media Confianza', icon: '🟡' },
+  { key: 'low-confidence', label: 'Baja Confianza', icon: '🟢' },
 ];
 
 export default function Home() {
@@ -99,14 +245,34 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedCategory === 'all') {
-      setFilteredData([...mockData.restaurants, ...mockData.hotels, ...mockData.attractions, ...mockData.services]);
+      setFilteredData([
+        ...mockCrimeData['high-confidence'], 
+        ...mockCrimeData['medium-confidence'], 
+        ...mockCrimeData['low-confidence']
+      ]);
     } else {
-      setFilteredData((mockData as any)[selectedCategory] || []);
+      setFilteredData((mockCrimeData as any)[selectedCategory] || []);
     }
   }, [selectedCategory]);
 
   const handlePointClick = (point: MapPoint) => {
     setSelectedPoint(point);
+  };
+
+  const formatDateTime = (dateTime: string) => {
+    return new Date(dateTime).toLocaleString('es-CL', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 80) return 'text-red-600 bg-red-50';
+    if (confidence >= 50) return 'text-yellow-600 bg-yellow-50';
+    return 'text-green-600 bg-green-50';
   };
 
   return (
@@ -121,18 +287,18 @@ export default function Home() {
       </div>
 
       {/* Sidebar - Right Side */}
-      <div className="w-80 bg-white shadow-lg border-l flex flex-col">
+      <div className="w-96 bg-white shadow-lg border-l flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b bg-gray-50">
-          <h1 className="text-lg font-bold text-gray-900">🗺️ Región Metropolitana</h1>
-          <p className="text-xs text-gray-500 mt-1">
-            Santiago, Chile • {filteredData.length} lugares
+        <div className="p-4 border-b bg-red-50">
+          <h1 className="text-lg font-bold text-red-900">🚔 Monitor de Seguridad</h1>
+          <p className="text-xs text-red-700 mt-1">
+            Región Metropolitana • {filteredData.length} reportes activos
           </p>
         </div>
 
         {/* Categories */}
         <div className="p-4 border-b">
-          <h2 className="text-sm font-semibold mb-3 text-gray-700">Categorías</h2>
+          <h2 className="text-sm font-semibold mb-3 text-gray-700">Nivel de Confianza</h2>
           <div className="space-y-2">
             {categories.map((category) => (
               <button
@@ -140,7 +306,7 @@ export default function Home() {
                 onClick={() => setSelectedCategory(category.key)}
                 className={`w-full text-left p-2 rounded-lg transition-colors text-sm ${
                   selectedCategory === category.key
-                    ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                    ? 'bg-red-100 text-red-700 border border-red-200'
                     : 'hover:bg-gray-100'
                 }`}
               >
@@ -153,41 +319,54 @@ export default function Home() {
 
         {/* Selected Point Info */}
         {selectedPoint && (
-          <div className="p-4 border-b bg-blue-50">
-            <h3 className="font-semibold text-blue-900 text-sm">{selectedPoint.name}</h3>
-            <p className="text-xs text-blue-700 mt-1">{selectedPoint.description}</p>
-            <div className="flex items-center mt-2">
-              <span className="text-yellow-500 text-sm">⭐</span>
-              <span className="ml-1 text-xs text-blue-700">{selectedPoint.rating}</span>
-              <span className="ml-auto text-xs text-blue-600 capitalize">{selectedPoint.type}</span>
+          <div className="p-4 border-b bg-red-50">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold text-red-900 text-sm">{selectedPoint.report.title}</h3>
+              <span className={`px-2 py-1 rounded text-xs font-semibold ${getConfidenceColor(selectedPoint.rating)}`}>
+                {selectedPoint.rating}%
+              </span>
             </div>
+            <p className="text-xs text-red-700 mb-2">{selectedPoint.report.licensePlate} - {selectedPoint.report.vehicleDescription}</p>
+            <p className="text-xs text-gray-600 mb-2">{selectedPoint.report.location.address}</p>
+            <p className="text-xs text-red-600">{formatDateTime(selectedPoint.report.incidentDatetime)}</p>
           </div>
         )}
 
-        {/* Points List - Scrollable */}
+        {/* Reports List - Scrollable */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4">
             <h2 className="text-sm font-semibold mb-3 text-gray-700">
-              {selectedCategory === 'all' ? 'Todos los lugares' : categories.find(c => c.key === selectedCategory)?.label}
+              {selectedCategory === 'all' ? 'Todos los Reportes' : categories.find(c => c.key === selectedCategory)?.label}
             </h2>
             <div className="space-y-3">
               {filteredData.map((point) => (
                 <div 
                   key={point.id}
                   className={`bg-white rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
-                    selectedPoint?.id === point.id ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
+                    selectedPoint?.id === point.id ? 'ring-2 ring-red-500 bg-red-50' : 'hover:bg-gray-50'
                   }`}
                   onClick={() => handlePointClick(point)}
                 >
-                  <h3 className="font-semibold text-gray-900 text-sm">{point.name}</h3>
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">{point.description}</p>
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="flex items-center">
-                      <span className="text-yellow-500 text-sm">⭐</span>
-                      <span className="ml-1 text-xs text-gray-700">{point.rating}</span>
-                    </div>
-                    <span className="text-xs text-gray-500 capitalize bg-gray-100 px-2 py-1 rounded">
-                      {point.type}
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900 text-sm">{point.report.title}</h3>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${getConfidenceColor(point.rating)}`}>
+                      {point.rating}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-800 font-medium mb-1">
+                    📋 {point.report.licensePlate} - {point.report.vehicleDescription}
+                  </p>
+                  <p className="text-xs text-gray-600 mb-2">📍 {point.report.location.address}</p>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-500">
+                      🕒 {formatDateTime(point.report.incidentDatetime)}
+                    </span>
+                    <span className={`px-2 py-1 rounded ${
+                      point.type === 'high-confidence' ? 'bg-red-100 text-red-700' :
+                      point.type === 'medium-confidence' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-green-100 text-green-700'
+                    }`}>
+                      {point.type.replace('-', ' ').toUpperCase()}
                     </span>
                   </div>
                 </div>

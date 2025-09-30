@@ -12,13 +12,42 @@ L.Icon.Default.mergeOptions({
 });
 
 interface MapPoint {
-  id: number;
+  id: string;
   name: string;
   lat: number;
   lng: number;
   type: string;
   rating: number;
   description: string;
+  report: {
+    reportId: string;
+    title: string;
+    summary: string;
+    incidentDatetime: string;
+    location: {
+      address: string;
+      latitude: number;
+      longitude: number;
+    };
+    licensePlate: string;
+    vehicleDescription: string;
+    imageDescriptionRaw: string;
+    timelineDeVistas: Array<{
+      index: number;
+      address: string;
+      datetime: string;
+      source: string | null;
+      notes: string | null;
+    }>;
+    lastKnownPosition: {
+      address: string;
+      datetime: string;
+    };
+    evidence: string[];
+    recommendedActions: string[];
+    confidence: number;
+    notes: string;
+  };
 }
 
 interface MapComponentProps {
@@ -59,20 +88,18 @@ const getMarkerIcon = (type: string, isSelected: boolean = false) => {
 
 const getTypeColor = (type: string) => {
   switch (type) {
-    case 'restaurant': return '#f59e0b';
-    case 'hotel': return '#3b82f6';
-    case 'attraction': return '#10b981';
-    case 'service': return '#8b5cf6';
-    default: return '#6b7280';
+    case 'high-confidence': return '#dc2626'; // red-600
+    case 'medium-confidence': return '#d97706'; // amber-600
+    case 'low-confidence': return '#16a34a'; // green-600
+    default: return '#6b7280'; // gray-500
   }
 };
 
 const getTypeEmoji = (type: string) => {
   switch (type) {
-    case 'restaurant': return '🍽️';
-    case 'hotel': return '🏨';
-    case 'attraction': return '🎭';
-    case 'service': return '🏥';
+    case 'high-confidence': return '🚨';
+    case 'medium-confidence': return '⚠️';
+    case 'low-confidence': return '👁️';
     default: return '📍';
   }
 };
@@ -106,15 +133,20 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
 
         // Add popup
         marker.bindPopup(`
-          <div style="padding: 8px; min-width: 200px;">
-            <h3 style="margin: 0 0 8px 0; font-weight: bold; color: #1f2937;">${point.name}</h3>
-            <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">${point.description}</p>
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center;">
-                <span style="color: #fbbf24;">⭐</span>
-                <span style="margin-left: 4px; font-size: 14px; color: #374151;">${point.rating}</span>
-              </div>
-              <span style="font-size: 12px; color: #9ca3af; text-transform: capitalize;">${point.type}</span>
+          <div style="padding: 10px; min-width: 250px;">
+            <h3 style="margin: 0 0 8px 0; font-weight: bold; color: #dc2626; font-size: 16px;">${point.report.title}</h3>
+            <div style="margin-bottom: 8px;">
+              <strong style="color: #374151;">🚗 ${point.report.licensePlate}</strong>
+              <span style="margin-left: 8px; color: #6b7280; font-size: 14px;">${point.report.vehicleDescription}</span>
+            </div>
+            <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">📍 ${point.report.location.address}</p>
+            <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">🕒 ${new Date(point.report.incidentDatetime).toLocaleString('es-CL')}</p>
+            <div style="display: flex; align-items: center; justify-content: between; margin-top: 8px;">
+              <span style="background-color: ${point.rating >= 80 ? '#fef2f2' : point.rating >= 50 ? '#fefce8' : '#f0fdf4'}; 
+                           color: ${point.rating >= 80 ? '#dc2626' : point.rating >= 50 ? '#d97706' : '#16a34a'}; 
+                           padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                Confianza: ${point.rating}%
+              </span>
             </div>
           </div>
         `);
@@ -156,32 +188,23 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onPointClick, selecte
       
       {/* Legend */}
       <div className="absolute bottom-4 left-4 bg-white p-3 rounded-lg shadow-lg border z-[1000]">
-        <h4 className="text-sm font-semibold mb-2">Leyenda</h4>
+        <h4 className="text-sm font-semibold mb-2 text-red-800">🚔 Reportes de Seguridad</h4>
         <div className="space-y-1">
           <div className="flex items-center text-xs">
-            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#f59e0b' }}></div>
-            Restaurantes
+            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#dc2626' }}></div>
+            Alta Confianza (80%+)
           </div>
           <div className="flex items-center text-xs">
-            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#3b82f6' }}></div>
-            Hoteles
+            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#d97706' }}></div>
+            Media Confianza (50-79%)
           </div>
           <div className="flex items-center text-xs">
-            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#10b981' }}></div>
-            Atracciones
-          </div>
-          <div className="flex items-center text-xs">
-            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#8b5cf6' }}></div>
-            Servicios
+            <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#16a34a' }}></div>
+            Baja Confianza (&lt;50%)
           </div>
         </div>
       </div>
-
-      {/* Map Controls Info */}
-      <div className="absolute top-4 right-4 bg-white p-2 rounded shadow-lg border z-[1000]">
-        <p className="text-xs text-gray-600">Región Metropolitana</p>
-        <p className="text-xs text-gray-500">Santiago, Chile</p>
-      </div>
+      
     </div>
   );
 };
