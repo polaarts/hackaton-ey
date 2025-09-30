@@ -363,14 +363,6 @@ export default function Home() {
         <div className="p-3 border-b">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-gray-800">Filtros por confianza</h3>
-            <button
-              className="inline-flex items-center text-[11px] text-gray-600 hover:text-gray-800"
-              aria-label="¿Qué es el porcentaje de confianza?"
-              title="¿Qué es el % de confianza?"
-              onClick={() => alert('El % de confianza indica la probabilidad estimada por el modelo de que el evento sea verdadero.')}
-            >
-              ℹ️ Ayuda
-            </button>
           </div>
           <div className="flex flex-wrap gap-2">
             {([
