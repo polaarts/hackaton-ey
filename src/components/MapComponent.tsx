@@ -279,7 +279,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ data, onMarkerClick, onMapC
       {/* Legend */}
       <div className="absolute bottom-4 left-4 bg-white p-3 rounded-lg shadow-lg border z-[1000]">
         <h4 className="text-sm font-semibold mb-2 text-red-800">🚔 Reportes de Seguridad</h4>
-        <div className="space-y-1">
+        <div className="space-y-1 text-black">
           <div className="flex items-center text-xs">
             <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: '#dc2626' }}></div>
             Alta Confianza (80%+)

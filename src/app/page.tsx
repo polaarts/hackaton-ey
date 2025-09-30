@@ -429,8 +429,8 @@ export default function Home() {
 
         {/* Selected report details */}
         {selectedReport && (
-          <div className="border-t border-gray-200 bg-gray-50 p-4 max-h-64 overflow-y-auto">
-            <h3 className="font-semibold text-black mb-2">Detalles del Reporte</h3>
+          <div className="border-t border-gray-200 bg-gray-50 p-4 max-h-96 overflow-y-auto">
+            <h3 className="font-semibold text-gray-700 mb-2">Detalles del Reporte</h3>
             <div className="space-y-2 text-black text-sm">
               <div>
                 <span className="font-medium">Título:</span> {selectedReport.report.title}
@@ -455,6 +455,52 @@ export default function Home() {
                 <span className="font-medium">Notas:</span> {selectedReport.report.notes}
               </div>
             </div>
+
+            {/* Evidence Section */}
+            {selectedReport.report.evidence && selectedReport.report.evidence.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-700 mb-2 flex items-center">
+                  📸 Evidencia ({selectedReport.report.evidence.length})
+                </h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {selectedReport.report.evidence.map((evidenceUrl, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={evidenceUrl}
+                        alt={`Evidencia ${index + 1}`}
+                        className="w-full h-24 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `data:image/svg+xml;base64,${btoa(`
+                            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                              <rect width="100" height="100" fill="#f3f4f6"/>
+                              <text x="50" y="45" font-family="Arial" font-size="10" text-anchor="middle" fill="#9ca3af">📷</text>
+                              <text x="50" y="60" font-family="Arial" font-size="8" text-anchor="middle" fill="#9ca3af">Imagen no</text>
+                              <text x="50" y="72" font-family="Arial" font-size="8" text-anchor="middle" fill="#9ca3af">disponible</text>
+                            </svg>
+                          `)}`;
+                        }}
+                        onClick={() => {
+                          // Open image in new tab/window
+                          window.open(evidenceUrl, '_blank');
+                        }}
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-b">
+                        Evidencia {index + 1}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Image description */}
+                {selectedReport.report.imageDescriptionRaw && (
+                  <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                    <span className="font-medium text-blue-800">Descripción:</span>
+                    <span className="text-blue-700 ml-1">{selectedReport.report.imageDescriptionRaw}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
