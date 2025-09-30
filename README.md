@@ -34,3 +34,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Reports Time-Range API
+
+### Environment Variables
+- `NEXT_PUBLIC_SUPABASE_URL` – Supabase project URL
+- `SUPABASE_SERVICE_ROLE_KEY` – Supabase service role key (keep secret)
+
+### Manual Verification
+Run the dev server with valid Supabase credentials, then execute:
+
+```
+curl "http://localhost:3000/api/reports?start_time=2025-09-01T00:00:00Z&end_time=2025-09-30T23:59:59Z"
+```
+
+Expect HTTP 200 with `reports` sorted by `incidentDatetime`; large ranges return all matching incidents.

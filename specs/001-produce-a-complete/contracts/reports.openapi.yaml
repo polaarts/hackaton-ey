@@ -1,0 +1,211 @@
+openapi: 3.1.0
+info:
+  title: Reports Time-Range API
+  version: 1.0.0
+paths:
+  /api/reports:
+    get:
+      summary: Retrieve reports within a time range
+      parameters:
+        - in: query
+          name: start_time
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Inclusive UTC ISO-8601 start datetime filter
+        - in: query
+          name: end_time
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Inclusive UTC ISO-8601 end datetime filter
+      responses:
+        '200':
+          description: Successfully retrieved reports
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+              examples:
+                success:
+                  value:
+                    reports:
+                      - reportId: "8c9f4a3e-3a2a-4f5b-8ab3-2f567b1a0f09"
+                        title: "Vehicle sighting near downtown"
+                        summary: "Suspected theft reported by witness"
+                        incidentDatetime: "2025-09-10T14:32:00Z"
+                        location:
+                          address: "123 Main St"
+                          latitude: 37.7749
+                          longitude: -122.4194
+                        licensePlate: "ABC1234"
+                        vehicleDescription: "Blue sedan"
+                        imageDescriptionRaw: null
+                        timelineEvents:
+                          - index: 1
+                            address: "123 Main St"
+                            datetime: "2025-09-10T14:32:00Z"
+                            source: "camera"
+                            notes: null
+                        lastKnownPosition:
+                          address: "456 Elm St"
+                          datetime: "2025-09-10T15:10:00Z"
+                        evidence:
+                          - "https://example.com/evidence/1.jpg"
+                        recommendedActions:
+                          - "Dispatch patrol"
+                        confidence: 0.82
+                        notes: "Suspect heading north"
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParams:
+                  value:
+                    error:
+                      code: INVALID_PARAMETERS
+                      message: start_time and end_time must be valid ISO-8601 datetimes with start_time <= end_time.
+        '500':
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                internalError:
+                  value:
+                    error:
+                      code: INTERNAL_ERROR
+                      message: Unexpected error retrieving reports.
+components:
+  schemas:
+    ReportsResponse:
+      type: object
+      properties:
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+      required:
+        - reports
+    Report:
+      type: object
+      properties:
+        reportId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        summary:
+          type: string
+          nullable: true
+        incidentDatetime:
+          type: string
+          format: date-time
+        location:
+          $ref: '#/components/schemas/Location'
+        licensePlate:
+          type: string
+          nullable: true
+        vehicleDescription:
+          type: string
+          nullable: true
+        imageDescriptionRaw:
+          type: string
+          nullable: true
+        timelineEvents:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEvent'
+        lastKnownPosition:
+          $ref: '#/components/schemas/LastKnownPosition'
+        evidence:
+          type: array
+          items:
+            type: string
+            format: uri
+        recommendedActions:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        notes:
+          type: string
+          nullable: true
+      required:
+        - reportId
+        - title
+        - incidentDatetime
+        - location
+        - timelineEvents
+        - lastKnownPosition
+        - evidence
+        - recommendedActions
+        - confidence
+    Location:
+      type: object
+      properties:
+        address:
+          type: string
+        latitude:
+          type: number
+          nullable: true
+        longitude:
+          type: number
+          nullable: true
+      required:
+        - address
+    TimelineEvent:
+      type: object
+      properties:
+        index:
+          type: integer
+        address:
+          type: string
+        datetime:
+          type: string
+          format: date-time
+        source:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - index
+        - address
+        - datetime
+    LastKnownPosition:
+      type: object
+      properties:
+        address:
+          type: string
+        datetime:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - address
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+          required:
+            - code
+            - message
+      required:
+        - error
